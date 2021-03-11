@@ -1,0 +1,19 @@
+.App {
+  text-align: center;
+}
+
+
+.displayedTime .count{
+    padding: 2%;
+    width: 100%;
+    height: 100%;
+    line-height: 87px;
+    text-decoration: none !important;
+    color: #3f51b5 !important;
+    background-color: #5462b161 !important;
+    border-radius: 10%;
+}
+
+.time {
+  font-size: 32px;
+}
