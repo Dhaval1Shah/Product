@@ -27,8 +27,10 @@ export default {
         dureTime: "api/emp/totalDurationTime",
         holidayLeave: "api/holiday-leave",
         removeLeave: "api/holiday-leave/",
-        eidtLeave:"api/holiday-leave/",
-        singleLeave:"api/holiday-leave/",
-        createTicket:"api/leave", 
+        eidtLeave: "api/holiday-leave/",
+        singleLeave: "api/holiday-leave/",
+        createTicket: "api/leave",
+        EditTicket: "api/leave/update-status/",
+        singleTicket: "api/leave/edit-status/"
     }
 };

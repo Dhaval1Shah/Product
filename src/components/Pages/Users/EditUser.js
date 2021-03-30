@@ -23,32 +23,32 @@ import EditForm from '../../Layouts/Forms/UserForms/EditForm';
 
 
 class HandleUser1 extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            users: {
-                firstName: null,
-                lastName: null,
-                email: null,
-                gender: null,
-                dob: null,
-                photo: null,
-                qualification: null,
-                last_organization: null,
-                roleName: null,
-            },
-            uploadedImgName: "",
-            user: false,
-            userId: 0,
-            role: []
-        }
-        // this.handleSubmit = this.handleSubmit.bind(this);
-        // this.roleData = this.roleData.bind(this);
-        // this.updateChange = this.updateChange.bind(this);
-        // this.addRole = this.addRole.bind(this);
-        // this.editUser = this.editUser.bind(this);
-        // this.roleData();
-    }
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         users: {
+    //             firstName: null,
+    //             lastName: null,
+    //             email: null,
+    //             gender: null,
+    //             dob: null,
+    //             photo: null,
+    //             qualification: null,
+    //             last_organization: null,
+    //             roleName: null,
+    //         },
+    //         uploadedImgName: "",
+    //         user: false,
+    //         userId: 0,
+    //         role: []
+    //     }
+    //     // this.handleSubmit = this.handleSubmit.bind(this);
+    //     // this.roleData = this.roleData.bind(this);
+    //     // this.updateChange = this.updateChange.bind(this);
+    //     // this.addRole = this.addRole.bind(this);
+    //     // this.editUser = this.editUser.bind(this);
+    //     // this.roleData();
+    // }
 
     componentWillMount() {
         if (this.props && this.props.authToken === false) {
@@ -58,7 +58,6 @@ class HandleUser1 extends Component {
       }
     
       componentWillReceiveProps(props) {
-        console.log(props.authToken);
         if (props && props.authToken === false) {
           props.history.push('/login');
         }
@@ -142,15 +141,15 @@ class HandleUser1 extends Component {
 
     render() {
         const classes = this.props;
-        let roleOptions = [];
-        if (Object.keys(this.state.role).length > 0) {
-            Object.keys(this.state.role).forEach((key) => {
-                roleOptions.push(<MenuItem value={this.state.role[key].name}>{this.state.role[key].name}</MenuItem>)
-            })
-        }
-        else {
-            roleOptions.push(<MenuItem value=""><em>Select Role</em></MenuItem>);
-        }
+        // let roleOptions = [];
+        // if (Object.keys(this.state.role).length > 0) {
+        //     Object.keys(this.state.role).forEach((key) => {
+        //         roleOptions.push(<MenuItem value={this.state.role[key].name}>{this.state.role[key].name}</MenuItem>)
+        //     })
+        // }
+        // else {
+        //     roleOptions.push(<MenuItem value=""><em>Select Role</em></MenuItem>);
+        // }
         return (
             <div>
                 <Header

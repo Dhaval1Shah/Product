@@ -145,7 +145,7 @@ export default class CountdownTimer extends Component {
                     <div className="displayedTime">{this.format(count)}</div>
                 </Grid>
                 <Grid item xs={5}></Grid>
-                <Grid xs={2}>
+                <Grid item xs={2}>
                     {this.props.timerOn === false && (
                         <LoadderButton onClickFn={this.props.startTimer} btnText="In" />
                     )}

@@ -20,7 +20,6 @@ class Permission extends Component {
     super(props);
     this.state = {
       permission: [],
-      count:0,
       setopen: false,
       permissionName: false,
       isPopup: false,
@@ -58,8 +57,7 @@ class Permission extends Component {
     let permission = await AuthApi.getPermission();
     if (permission && permission.status === true) {
       this.setState({
-        permission: permission.data,
-        count:permission.data.length
+        permission: permission.data
       })
     }
   }
@@ -156,7 +154,6 @@ class Permission extends Component {
                 {...this.props}
                 tableTh={this.state.tableTh}
                 tableData={this.state.permission}
-                tableCount={this.state.count}
                 colNameToShow={['name', 'created_at']}
                 openPopUp={this.handleClickOpen}
                 openPopUpUpdate={this.handleClickOpenUpdate}
@@ -188,10 +185,9 @@ class PopUp extends Component {
         <Dialog open={this.props.setopen}>
           <DialogTitle>{(this.props.isPopup) ? "Add Permission" : " Update Permission"}</DialogTitle>
           <DialogContent>
-            {/* <DialogContentText> */}
-              {/* <TextField autoFocus name="name" label="Name" type="text" value={(this.props.permissionName && this.props.permissionName !== false) ? this.props.permissionName : null} onChange={(e) => { this.props.updatChange(e) }} /> */}
-              <TextField autoFocus name="name" label="Name" type="text" value={(this.props.permissionName && this.props.permissionName !== false) ? this.props.permissionName : ""} onChange={(e) => { this.props.updatChange(e) }} />
-            {/* </DialogContentText> */}
+            <DialogContentText>
+              <TextField autoFocus name="name" label="Name" type="text" value={(this.props.permissionName && this.props.permissionName !== false) ? this.props.permissionName : null} onChange={(e) => { this.props.updatChange(e) }} />
+            </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button color="primary" onClick={(e) => { this.props.saveData() }} > Save </Button>

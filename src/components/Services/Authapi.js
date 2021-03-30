@@ -431,7 +431,7 @@ export default new (class AuthApi {
             let postData = {
                 'leaveName': postDatas.leaveName,
                 'dateRange': postDatas.dateRange,
-                'noOfDays': postDatas.noOfDays ,
+                'noOfDays': postDatas.noOfDays,
             }
             this.setHeaders('post');
             let data = await axios
@@ -494,7 +494,7 @@ export default new (class AuthApi {
                 'name': leave.leaveName,
                 'dateRange': leave.dateRange,
                 'noOfDays': leave.noOfDays,
-               
+
             }
             let data = await axios
                 .put(url, postData)
@@ -512,7 +512,7 @@ export default new (class AuthApi {
 
 
 
-    
+
     async singleLeave(id) {
         try {
             const url = config.apiurl + config.apis.singleLeave + id;
@@ -539,7 +539,7 @@ export default new (class AuthApi {
                 'leaveType': postDatas.leaveType,
                 'ticketMesasge': postDatas.ticketMesasge,
                 'dateRange': postDatas.dateRange,
-                'noOfDays': postDatas.noOfDays ,
+                'noOfDays': postDatas.noOfDays,
             }
             this.setHeaders('post');
             let data = await axios
@@ -557,7 +557,66 @@ export default new (class AuthApi {
     }
 
 
+    async getTickets() {
+        try {
+            const url = config.apiurl + config.apis.createTicket;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
 
+
+    async updateTicket(ticket, id) {
+        try {
+            const url = config.apiurl + config.apis.EditTicket + id;
+            this.setHeaders('put');
+            let postData = {
+                'leaveStatus': ticket.leaveStatus,
+
+
+            }
+            let data = await axios
+                .put(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+    async singleTicket(id) {
+        try {
+            const url = config.apiurl + config.apis.singleTicket + id;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
 
 
 })();

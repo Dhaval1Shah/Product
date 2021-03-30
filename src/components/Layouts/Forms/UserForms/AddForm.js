@@ -20,17 +20,17 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 
 const iniuservalid = {
-    firstName: null,
-    lastName: null,
-    email: null,
-    gender: null,
-    dob: null,
+    firstName: "",
+    lastName: "",
+    email: "",
+    gender: "",
+    dob: "",
     photo: null,
-    imageName: null,
-    qualification: null,
-    last_organization: null,
-    password: null,
-    roleName: null,
+    imageName: "",
+    qualification: "",
+    last_organization: "",
+    password: "",
+    roleName: "",
     role: false
 
 }
@@ -124,7 +124,7 @@ const Addform = (props) => {
         if (role && role.status === true) {
             if (Object.keys(role.data).length > 0) {
                 Object.keys(role.data).forEach((key) => {
-                    roleOptions.push(<MenuItem value={role.data[key].name}>{role.data[key].name}</MenuItem>)
+                    roleOptions.push(<MenuItem key={key} value={role.data[key].name}>{role.data[key].name}</MenuItem>)
                 })
             }
             else {
@@ -137,7 +137,6 @@ const Addform = (props) => {
 
     }
     React.useEffect(() => RoleData(), []);
-
 
 
 
@@ -155,7 +154,7 @@ const Addform = (props) => {
             })
 
         }
-        console.log(formValues)
+      
     }
 
     const removeImg = async (e) => {
@@ -224,7 +223,7 @@ const Addform = (props) => {
                             value={formValues.firstName}
                             onChange={handleChange1}
                             className={formErrors.firstName && "input-error"}
-
+                            
                         />
                         {formErrors.firstName && (
                             <span className="error">{formErrors.firstName}</span>
@@ -278,9 +277,9 @@ const Addform = (props) => {
                                     <FormLabel component="legend">Gender</FormLabel>
                                 </Grid>
                             </Grid>
-                            <RadioGroup aria-label="gender" name="gender" defaultValue="female" onChange={handleChange1} fullWidth>
+                            <RadioGroup aria-label="gender" name="gender" defaultValue="female" onChange={handleChange1}>
                                 <Grid container className={classes.root} spacing={2}>
-                                    <Grid textAlign="left" item xs={6}><FormControlLabel value="female" control={<Radio />} label="Female" /></Grid>
+                                    <Grid textalign='left' item xs={6}><FormControlLabel value="female" control={<Radio />} label="Female" /></Grid>
                                     <Grid item xs={6}><FormControlLabel value="male" control={<Radio />} label="Male" /></Grid>
 
                                 </Grid>
@@ -431,8 +430,8 @@ const Addform = (props) => {
                             )}
 
                     </Grid>
-                    <Grid item xs={4} true></Grid>
-                    <Grid item xs={4} true></Grid>
+                    <Grid item xs={4} ></Grid>
+                    <Grid item xs={4} ></Grid>
                 </Grid>
                 <Grid container className={classes.root} spacing={3}>
                     <Grid item xs={4} style={{ display: 'flex' }}>

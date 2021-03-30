@@ -64,7 +64,14 @@ class Dashboard extends Component {
                     </CardContent>
                   </Card>
                 </Grid>
-                <Grid item xs={6}></Grid>
+                <Grid item xs={6}>
+                  <Card className={classes.root} style={{ marginBottom: '3%' }}>
+                  <CardContent>
+                 
+                    </CardContent>
+                 
+                  </Card>
+                </Grid>
               </Grid>
             </div>
           } />

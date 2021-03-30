@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import Dashboard from './components/Pages/Dashboard';
 import Login from './components/Pages/Login';
 import Pagenotfound from './Pagenotfound';
@@ -15,11 +15,12 @@ import green from '@material-ui/core/colors/green';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import EditUser from './components/Pages/Users/EditUser';
 import Leaves from './components/Pages/Leaves/Leaves1';
-import AddLeaves from  './components/Pages/Leaves/AddLeaves';
+import AddLeaves from './components/Pages/Leaves/AddLeaves';
 import EditLeaves from './components/Pages/Leaves/EditLeaves';
 import LeavesTicket from './components/Pages/LeavesTicket/Ticket';
 import AddTickets from './components/Pages/LeavesTicket/AddTickets';
-
+import EditTicket from './components/Pages/LeavesTicket/EditTicket';
+import ProtectedRoute from './components/ProtectedRoute';
 
 class App extends Component {
 
@@ -27,6 +28,7 @@ class App extends Component {
     super(props);
     this.state = {
       authToken: (ls.get("authToken") && ls.get("authToken") !== null && ls.get("authToken") !== false) ? ls.get("authToken") : false,
+      roles: (ls.get("roles") && ls.get("roles") !== null && ls.get("roles") !== false) ? ls.get("roles") : false,
       authUser: false,
       location: document.location.pathname,
       count: (ls.get('count')) ? ls.get('count') : 0,
@@ -101,7 +103,7 @@ class App extends Component {
   async stopTimer() {
     await AuthApi.outTime();
     this.setState({ timerOn: false }, function () {
-      this.setState({ stopTime: Date.now()  });
+      this.setState({ stopTime: Date.now() });
       clearInterval(this.timer);
     });
     this.saveStateToLocalStorage();
@@ -122,10 +124,13 @@ class App extends Component {
     if (checkLogin && checkLogin.status !== false) {
       this.setAutUser({ authUser: checkLogin.data });
     } else {
+      ls.set('roles', false)
       ls.set('authToken', false)
-      this.setAutUser({ authUser: false, authToken: false });
+      this.setAutUser({ authUser: false, authToken: false, roles: false });
     }
+
   }
+
 
   setAutUser(authData) {
     this.setState(authData);
@@ -140,11 +145,12 @@ class App extends Component {
       <div className="App">
         <Router>
           <Switch>
-            <Route exact path='/dashboard' render={(props) => (
+          <Route exact path='/dashboard' render={(props) => (
               <Dashboard
                 {...props}
                 authUser={this.state.authUser}
                 authToken={this.state.authToken}
+                roles={this.state.roles}
                 setAutUser={this.setAutUser}
                 count={this.state.count}
                 timerOn={this.state.timerOn}
@@ -156,72 +162,176 @@ class App extends Component {
                 stopTime={this.state.stopTime}
               />
             )} />
-            <Route exact path='/permission' render={(props) => (
-              <Permission
-                {...props}
+              <ProtectedRoute
+                {...this.props}
+                exact
+                path="/permission"
+                component={Permission}
                 authUser={this.state.authUser}
                 authToken={this.state.authToken}
-                setAutUser={this.setAutUser} />
-            )} />
-            <Route exact path='/role' render={(props) => (
-              <Role
-                {...props}
+                setAutUser={this.setAutUser}
+              />
+              <ProtectedRoute
+                {...this.props}
+                exact
+                path="/role"
+                component={Role}
                 authUser={this.state.authUser}
                 authToken={this.state.authToken}
-                setAutUser={this.setAutUser} />
-            )} />
-            <Route exact path='/users' render={(props) => (
-              <User
-                {...props}
+                setAutUser={this.setAutUser}
+              />
+              <ProtectedRoute
+                {...this.props}
+                exact
+                path="/users"
+                component={User}
                 authUser={this.state.authUser}
                 authToken={this.state.authToken}
-                setAutUser={this.setAutUser} />
-            )} />
+                setAutUser={this.setAutUser}
+              />
+              <ProtectedRoute
+                {...this.props}
+                exact
+                path="/users/add"
+                component={AddForm}
+                authToken={this.state.authToken}
+                setAutUser={this.setAutUser}
+              />
+              <ProtectedRoute
+                {...this.props}
+                exact
+                path="/users/edit/:id"
+                component={EditUser}
+                authToken={this.state.authToken}
+                setAutUser={this.setAutUser}
+              />
+              <ProtectedRoute
+                {...this.props}
+                exact
+                path="/leaves"
+                component={Leaves}
+                authUser={this.state.authUser}
+                authToken={this.state.authToken}
+                setAutUser={this.setAutUser}
+              />
+              <ProtectedRoute
+                {...this.props}
+                exact
+                path="/leaves/add"
+                component={AddLeaves}
+                authToken={this.state.authToken}
+                setAutUser={this.setAutUser}
+              />
+              <ProtectedRoute
+                {...this.props}
+                exact
+                path="/leaves/edit/:id"
+                component={EditLeaves}
+                authToken={this.state.authToken}
+                setAutUser={this.setAutUser}
+              />
+              <ProtectedRoute
+                {...this.props}
+                exact
+                path="/tickets"
+                component={LeavesTicket}
+                authUser={this.state.authUser}
+                authToken={this.state.authToken}
+                setAutUser={this.setAutUser}
+              />
+              <ProtectedRoute
+                {...this.props}
+                exact
+                path="/tickets/add"
+                component={AddTickets}
+                authToken={this.state.authToken}
+                setAutUser={this.setAutUser}
+              />
+              <ProtectedRoute
+                {...this.props}
+                exact
+                path="/tickets/edit/:id"
+                component={EditTicket}
+                authToken={this.state.authToken}
+                setAutUser={this.setAutUser}
+              />
+             
+           
+             {/* {ls('roles') === 'Super Admin' ?
+              <Route exact path='/permission' render={(props) => (
+                <Permission
+                  {...props}
+                  authUser={this.state.authUser}
+                  authToken={this.state.authToken}
+                  setAutUser={this.setAutUser} />
+              )} /> : null}
+            {ls('roles') === 'Super Admin' ?
+              <Route exact path='/role' render={(props) => (
+                <Role
+                  {...props}
+                  authUser={this.state.authUser}
+                  authToken={this.state.authToken}
+                  setAutUser={this.setAutUser} />
+              )} /> : null}
+            {ls('roles') === 'Super Admin' ?
+              <Route exact path='/users' render={(props) => (
+                <User
+                  {...props}
+                  authUser={this.state.authUser}
+                  authToken={this.state.authToken}
+                  setAutUser={this.setAutUser} />
+              )} /> : null}
             <Route exact path='/users/add' render={(props) => (
               <AddForm
                 {...props}
                 authToken={this.state.authToken}
                 setAutUser={this.setAutUser} />
-            )} />
-            <Route exact path='/users/edit/:id' render={(props) => (
+            )} /> */}
+            {/* <Route exact path='/users/edit/:id' render={(props) => (
               <EditUser
                 {...props}
                 authToken={this.state.authToken}
                 setAutUser={this.setAutUser} />
-            )} />
-             <Route exact path='/leaves' render={(props) => (
-              <Leaves
-                {...props}
-                authUser={this.state.authUser}
-                authToken={this.state.authToken}
-                setAutUser={this.setAutUser} />
-            )} />
-             <Route exact path='/leaves/add' render={(props) => (
+            )} /> */}
+            {/*{ls('roles') === 'Super Admin' ?
+              <Route exact path='/leaves' render={(props) => (
+                <Leaves
+                  {...props}
+                  authUser={this.state.authUser}
+                  authToken={this.state.authToken}
+                  setAutUser={this.setAutUser} />
+              )} /> : null}
+            <Route exact path='/leaves/add' render={(props) => (
               <AddLeaves
                 {...props}
                 authToken={this.state.authToken}
                 setAutUser={this.setAutUser} />
             )} />
-                <Route exact path='/leaves/edit/:id' render={(props) => (
+            <Route exact path='/leaves/edit/:id' render={(props) => (
               <EditLeaves
                 {...props}
                 authToken={this.state.authToken}
                 setAutUser={this.setAutUser} />
             )} />
-                <Route exact path='/tickets' render={(props) => (
-                  <LeavesTicket
-                      {...props}
-                      authUser={this.state.authUser}
-                      authToken={this.state.authToken}
-                      setAutUser={this.setAutUser} />
+            <Route exact path='/tickets' render={(props) => (
+              <LeavesTicket
+                {...props}
+                authUser={this.state.authUser}
+                authToken={this.state.authToken}
+                setAutUser={this.setAutUser} />
             )} />
-                 <Route exact path='/tickets/add' render={(props) => (
-                   <AddTickets
-                     {...props}
-                     authToken={this.state.authToken}
-                     setAutUser={this.setAutUser} />
-            )} />  
-
+            <Route exact path='/tickets/add' render={(props) => (
+              <AddTickets
+                {...props}
+                authToken={this.state.authToken}
+                setAutUser={this.setAutUser} />
+            )} />
+            <Route exact path='/tickets/edit/:id' render={(props) => (
+              <EditTicket
+                {...props}
+                authToken={this.state.authToken}
+                setAutUser={this.setAutUser} />
+            )} /> */}
 
 
 
@@ -241,6 +351,7 @@ class App extends Component {
             )} />
 
             <Route exact path='*' exact={true} component={Pagenotfound} />
+
           </Switch>
         </Router>
       </div>

@@ -8,7 +8,6 @@ import swal from 'sweetalert';
 import ls from "local-storage";
 import Grid from '@material-ui/core/Grid';
 
-
 const validationSchema = yup.object({
     email: yup
         .string('Enter your email')
@@ -30,8 +29,7 @@ const LoginForm = (props) => {
             let checkLogin = await AuthApi.login(values);
             if (checkLogin && checkLogin !== false) {
                 ls.set("authToken", checkLogin.access_token);
-                ls.set("roles", checkLogin.user.roles[0].name)
-                props.setAutUser({ authUser: checkLogin.data, authToken: checkLogin.access_token, roles: checkLogin.user.roles[0].name })
+                props.setAutUser({ authUser: checkLogin.data, authToken: checkLogin.access_token })
             } else {
                 swal({
                     title: "OOPS!",

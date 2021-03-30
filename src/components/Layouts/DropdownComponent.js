@@ -24,13 +24,13 @@ export default function DropdownComponent(props) {
 
   let dropdownOptions = [];
   if (Object.keys(props.inputOptions).length > 0) {
-    dropdownOptions.push(<MenuItem value=""><em>Select {props.inputName}</em></MenuItem>);
+    dropdownOptions.push(<MenuItem key={Math.random()} value=""><em>Select {props.inputName}</em></MenuItem>);
     Object.keys(props.inputOptions).forEach((key) => {
-      dropdownOptions.push(<MenuItem value={props.inputOptions[key].name}>{props.inputOptions[key].name}</MenuItem>)
+      dropdownOptions.push(<MenuItem key={key} value={props.inputOptions[key].name}>{props.inputOptions[key].name}</MenuItem>)
     })
   }
   else {
-    dropdownOptions.push(<MenuItem value=""><em>Select {props.inputName}</em></MenuItem>);
+    dropdownOptions.push(<MenuItem key={Math.random()} value=""><em>Select {props.inputName}</em></MenuItem>);
   }
 
   return (

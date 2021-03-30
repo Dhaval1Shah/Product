@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { withStyles, makeStyles, useTheme, lighten } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -22,7 +22,6 @@ import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import FontAwesomeIconComponent from '../Layouts/FontAwesomeIconComponent';
 import Typography from '@material-ui/core/Typography';
-
 
 export default function TableComponent(props) {
   const classes = useStyles();
@@ -49,35 +48,19 @@ export default function TableComponent(props) {
 
   const getActionBtns = (props, row) => {
     return <div>
-      <Grid container spacing={3}>
-        {(props.actionBtns.indexOf('update') > -1) ? <Grid item xs={1}> <IconButton variant="contained" color="primary" onClick={(e) => { (props.openPopUpUpdate !== false) ? props.openPopUpUpdate(row) : props.history.push(props.updateRoute + '/' + row.id) }}><FontAwesomeIconComponent classes="fa fa-edit" colorName="primary" fontSize={"small"} /></IconButton> </Grid> : ""}
-        {(props.actionBtns.indexOf('delete') > -1) ? <Grid item xs={1}> <IconButton variant="contained" color="primary" onClick={(e) => { props.removeRow(row.id) }}><FontAwesomeIconComponent classes="fa fa-trash" colorName="primary" fontSize={"small"} /></IconButton> </Grid> : ""}
+      <Grid container spacing="{3}">
+        {(props.actionBtns.indexOf('update') > -1) ? <Grid item xs="{12}"> <IconButton variant="contained" color="primary" onClick={(e) => { (props.openPopUpUpdate !== false) ? props.openPopUpUpdate(row) : props.history.push(props.updateRoute + '/' + row.id) }}><Tooltip title="Update" aria-label="Update"><FontAwesomeIconComponent classes="fa fa-edit" colorName="primary" fontSize={"small"} /></Tooltip></IconButton> </Grid> : ""}
+        {(props.actionBtns.indexOf('delete') > -1) ? <Grid item xs="{12}"> <IconButton variant="contained" color="primary" onClick={(e) => { props.removeRow(row.id) }}><Tooltip title="Delete" aria-label="Delete"><FontAwesomeIconComponent classes="fa fa-trash" colorName="primary" fontSize={"small"} /></Tooltip></IconButton> </Grid> : ""}
       </Grid>
     </div>
   };
 
-  // let th = [];
-  useEffect(() => {
-    if (props.tablePagestatus === true) {
-      let rawCount = props.tableCount
-      let perPage = rowsPerPage
-      let answer = rawCount/perPage;
-      let page2 = page
-      if(page2  > (rawCount % perPage)) {
-      if((rawCount % perPage) ===0){
-        handleChangePage(answer - 1)
-      }else {
-        handleChangePage(Math.floor(answer))
-      }
-    }
-  }
-  });
+  let th = [];
 
   let td = [];
   let tr = [];
   if (Object.keys(props.tableData).length > 0) {
     let tableRows = props.tableData;
-   
     if (rowsPerPage > 0) {
       tableRows = props.tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
     }
@@ -85,35 +68,33 @@ export default function TableComponent(props) {
     Object.keys(tableRows).forEach((key) => {
       Object.keys(tableRows[key]).forEach((i) => {
         if (props.colNameToShow.indexOf(i) > -1) {
-          td.push(<TableCell key={i} align="left">{tableRows[key][i]}</TableCell>)
+          td.push(<TableCell align="left">{tableRows[key][i]}</TableCell>)
         }
       })
-      // td.push()
-      tr.push(<StyledTableRow key={key}>{td}<TableCell align="left">{getActionBtns(props, tableRows[key])}</TableCell></StyledTableRow>);
+      td.push(<TableCell align="left">{getActionBtns(props, tableRows[key])}</TableCell>)
+      tr.push(<StyledTableRow key={key}>{td}</StyledTableRow>);
       td = [];
     })
 
-    // if (emptyRows > 0) {
-    //   tr.push(<TableRow style={{ height: 67 * emptyRows }}> <TableCell colSpan={Object.keys(props.tableTh).length} /> </TableRow>)
-    // }
-  }
+    if (emptyRows > 0) {
+      tr.push(<TableRow style={{ height: 67 * emptyRows }}> <TableCell colSpan={Object.keys(props.tableTh).length} /> </TableRow>)
+    }
+  } 
   else {
-    // td.push(<TableCell colSpan={Object.keys(props.tableTh).length} align="center">No data found</TableCell>)
-    tr.push(<StyledTableRow key={1}><TableCell colSpan={Object.keys(props.tableTh).length} align="center">No   found</TableCell></StyledTableRow>);
-    
+    td.push(<TableCell colSpan={Object.keys(props.tableTh).length} align="center">No data found</TableCell>)
+    tr.push(<StyledTableRow key={1}>{td}</StyledTableRow>);
   }
-  
 
   return (
     <TableContainer component={Paper} style={{ marginBottom: '5%' }}>
-      <Typography  variant="h2">Manage {props.modelName}</Typography>
+      <Typography variant="h2">Manage {props.modelName}</Typography>
       <Button variant="contained" color="primary" style={{ float: "right", margin: "22px" }} onClick={(e) => { (props.openPopUp !== false) ? props.openPopUp() : props.history.push(props.addRoute) }}>Add</Button>
       <Table className={classes.table} aria-label="customized table" style={{ tableLayout: 'fixed', width: '100%' }}>
         <TableHead>
           <EnhancedTableHead
             classes={classes}
-            order="desc"
-            orderBy="asc"
+            order={order}
+            orderBy={orderBy}
             onRequestSort={handleRequestSort}
             rowCount={props.tableTh.length}
             tableTh={props.tableTh}
@@ -127,8 +108,7 @@ export default function TableComponent(props) {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
               colSpan={3}
-              // count={props.tableData.length}
-              count={props.tableCount}
+              count={props.tableData.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
@@ -187,14 +167,10 @@ const useStyles1 = makeStyles((theme) => ({
   },
 }));
 
-
-
 function TablePaginationActions(props) {
-  // console.log(props.tablePage)
   const classes = useStyles1();
   const theme = useTheme();
   const { count, page, rowsPerPage, onChangePage } = props;
-
 
   const handleFirstPageButtonClick = () => {
     onChangePage(0);
@@ -205,14 +181,13 @@ function TablePaginationActions(props) {
   };
 
   const handleNextButtonClick = () => {
-    onChangePage(page + 1);  
+    onChangePage(page + 1);
   };
 
   const handleLastPageButtonClick = () => {
     onChangePage(Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
 
-  // console.log(props.count)
   return (
     <div className={classes.root}>
       <IconButton
@@ -288,9 +263,9 @@ function EnhancedTableHead(props) {
         <TableCell
           key={headCell.id}
           align={headCell.numeric ? 'right' : 'left'}
-          // padding="10%"
-          maxwidth="300px"
-          whitespace="normal"
+          padding="10%"
+          maxWidth="300px"
+          whiteSpace="normal"
           sortDirection={orderBy === headCell.id ? order : false}
         >
           {
@@ -314,7 +289,7 @@ function EnhancedTableHead(props) {
 EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  // onSelectAllClick: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,

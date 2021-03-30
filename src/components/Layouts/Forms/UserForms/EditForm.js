@@ -18,15 +18,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 
 const iniuser = {
-    firstName: null,
-    lastName: null,
-    email: null,
-    gender: null,
-    dob: null,
-    photo: null,
-    qualification: null,
-    last_organization: null,
-    roleName: null,
+    firstName: "",
+    lastName: "",
+    email: "",
+    gender: "",
+    dob: "",
+    photo: "",
+    qualification: "",
+    last_organization: "",
+    roleName: "",
     uploadedImgName: "",
     user: false,
     user_id: 0,
@@ -118,7 +118,7 @@ const EditForm = (props) => {
         let last_organization = (user.status === true && user.data && user.data.last_organization) ? user.data.last_organization : null;
         let userRole = (user.status === true && user.data && user.data.roles && Object.keys(user.data.roles).length > 0) ? user.data.roles : [];
         let roleName = (Object.keys(userRole).length > 0) ? userRole[0].name : null;
-        let imageName = user.data.photo.substr(user.data.photo.lastIndexOf('/') + 1);
+        let imageName =  user.data.photo !== null ? user.data.photo.substr(user.data.photo.lastIndexOf('/') + 1) : '';
         let uploadedImgName = imageName;
         setEditValues({
             firstName: firstName,
@@ -134,7 +134,7 @@ const EditForm = (props) => {
             user_id: user_id,
 
         })
-          console.log(editValues);
+         
 
 
     }
@@ -150,10 +150,11 @@ const EditForm = (props) => {
         const postData = new FormData();
         postData.append('file', e.target.files[0]);
         let updateImg = await AuthApi.updateImg(postData);
-        // console.log(updateImg);
+        console.log(updateImg);
         // return false;
         if (updateImg && updateImg.status === true) {
             setEditValues({
+                    ...editValues,
                 photo: updateImg.data.image_url,
                 uploadedImgName: updateImg.data.image_name
             })
@@ -162,23 +163,37 @@ const EditForm = (props) => {
     }
 
     const removeImg = async (e) => {
-        setEditValues({
-            photo: null,
-            uploadedImgName: null
-        })
+        let imageLink = editValues.photo;
+        imageLink = imageLink.substr(imageLink.indexOf('/', 7) + 1)
+        let remImg = await AuthApi.deleteImg(imageLink);
+        if (remImg && remImg.status === true) {
+            // setEditValues({
+            //     // ...setEditValues,
+            //     photo: null,
+            //     imageName: null
+            // })
+            getFormData()
+
+        } else {
+
+        }
+        // setEditValues({
+        //     photo: null,
+        //     uploadedImgName: null
+        // })
 
     }
 
 
     async function RoleData() {
         let role = await AuthApi.getRole();
-        console.log(role);
+
         //    console.log(editValues); 
 
         if (role && role.status === true) {
             if (Object.keys(role.data).length > 0) {
                 Object.keys(role.data).forEach((key) => {
-                    roleOptions.push(<MenuItem value={role.data[key].name}>{role.data[key].name}</MenuItem>)
+                    roleOptions.push(<MenuItem key={key} value={role.data[key].name}>{role.data[key].name}</MenuItem>)
                 })
             }
             else {
@@ -236,7 +251,7 @@ const EditForm = (props) => {
                         variant="outlined"
                         error={formErrors.firstName && true}
                         value={(editValues && editValues.firstName !== null) ? editValues.firstName : null}
-                        focused={(editValues && editValues.firstName !== null) ? true : false}
+                        // focused={(editValues && editValues.firstName !== null) ? true : false}
                         onChange={handleChange1}
                         className={formErrors.firstName && "input-error"}
                     />
@@ -251,7 +266,7 @@ const EditForm = (props) => {
                         label="Last name"
                         variant="outlined"
                         value={(editValues && editValues.lastName !== null) ? editValues.lastName : null}
-                        focused={(editValues && editValues.lastName !== null) ? true : false}
+                        // focused={(editValues && editValues.lastName !== null) ? true : false}
                         onChange={handleChange1}
                         className={formErrors.lastName && "input-error"}
                         error={formErrors.lastName && true}
@@ -267,7 +282,7 @@ const EditForm = (props) => {
                         label="Email-address"
                         variant="outlined"
                         value={(editValues && editValues.email !== null) ? editValues.email : null}
-                        focused={(editValues && editValues.email !== null) ? true : false}
+                        // focused={(editValues && editValues.email !== null) ? true : false}
                         error={formErrors.email && true}
                         onChange={handleChange1}
                         className={formErrors.email && "input-error"}
@@ -290,9 +305,11 @@ const EditForm = (props) => {
                                     <FormLabel component="legend">Gender</FormLabel>
                                 </Grid>
                             </Grid>
-                            <RadioGroup aria-label="gender" name="gender" value={editValues.gender} focused={(editValues && editValues.gender !== null) ? true : false} fullWidth>
+                            <RadioGroup aria-label="gender" name="gender"  onChange={handleChange1} value={editValues.gender} 
+                            // focused={(editValues && editValues.gender !== null) ? true : false}
+                            >
                                 <Grid container className={classes.root} spacing={2}>
-                                    <Grid textAlign="left" item xs={6}><FormControlLabel value="Female" control={<Radio />} label="Female" /></Grid>
+                                    <Grid item xs={6}><FormControlLabel value="Female" control={<Radio />} label="Female" /></Grid>
                                     <Grid item xs={6}><FormControlLabel value="Male" control={<Radio />} label="Male" /></Grid>
                                 </Grid>
                             </RadioGroup>
@@ -305,10 +322,10 @@ const EditForm = (props) => {
                             name="dob"
                             type="date"
                             variant="outlined"
-                            defaultValue="2017-05-24"
+                            // defaultValue="2017-05-24"
                             error={formErrors.dob && true}
                             value={(editValues && editValues.dob !== null) ? editValues.dob : null}
-                            focused={(editValues && editValues.dob !== null) ? true : false}
+                            // focused={(editValues && editValues.dob !== null) ? true : false}
                             onChange={handleChange1}
                             className={formErrors.dob && "input-error"}
                             className={classes.textField}
@@ -372,7 +389,7 @@ const EditForm = (props) => {
                         label="Qualification"
                         variant="outlined"
                         value={(editValues && editValues.qualification !== null) ? editValues.qualification : null}
-                        focused={(editValues && editValues.qualification !== null) ? true : false}
+                        // focused={(editValues && editValues.qualification !== null) ? true : false}
                         error={formErrors.qualification && true}
                         onChange={handleChange1}
                         className={formErrors.dob && "input-error"}
@@ -388,7 +405,7 @@ const EditForm = (props) => {
                         label="Last Organization"
                         variant="outlined"
                         value={(editValues && editValues.last_organization !== null) ? editValues.last_organization : null}
-                        focused={(editValues && editValues.last_organization !== null) ? true : false}
+                        // focused={(editValues && editValues.last_organization !== null) ? true : false}
                         error={formErrors.last_organization && true}
                         onChange={handleChange1}
                         className={formErrors.last_organization && "input-error"}
@@ -408,8 +425,8 @@ const EditForm = (props) => {
                                 error={formErrors.roleName && true}
                                 className={formErrors.roleName && "input-error"}
                                 onChange={handleChange1}
-                                value={(editValues && editValues.roleName && editValues.roleName !== null) ? editValues.roleName : null}
-                                focused={(editValues && editValues.roleName && editValues.roleName !== null) ? true : false}
+                                value={(editValues && editValues.roleName && editValues.roleName !== null) ? editValues.roleName : ""}
+                                // focused={(editValues && editValues.roleName && editValues.roleName !== null) ? true : false}
 
                             >{roleOptions}
                             </Select>

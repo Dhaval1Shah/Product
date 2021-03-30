@@ -28,13 +28,13 @@ import moment from 'moment';
 import ls from "local-storage";
 
 const iniTickets = {
-    leaveType : null,
-    ticketMesasge : null,
-    dateRange: null,
-    startDate: null,
-    endDate: null,
-    noOfDays: null,
-    
+    leaveType: "",
+    ticketMesasge: "",
+    dateRange: "",
+    startDate: "",
+    endDate: "",
+    noOfDays: "",
+
 }
 
 
@@ -48,8 +48,8 @@ const AddTickets = (props) => {
     useEffect(() => {
         if (props && props.authToken === false) {
             props.history.push('/login');
-          }
-        });
+        }
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -57,14 +57,19 @@ const AddTickets = (props) => {
         // console.log(ticketValues);
     };
 
-    
+
 
     function dateDiffInDays(startDate, endDate) {
         // round to the nearest whole number
         return Math.round((endDate - startDate) / (1000 * 60 * 60 * 24));
     }
     const daysDiff = dateDiffInDays(new Date(ticketValues.startDate), new Date(ticketValues.endDate));
-    const dsp = dateDiffInDays(new Date(), new Date(ticketValues.startDate));
+    const today = new Date();
+    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    const dsp = dateDiffInDays(new Date(date), new Date(ticketValues.startDate));
+    // console.log("date only=="+new Date());
+    // console.log("UTC date=="+new Date(ticketValues.startDate));
+   
 
 
     const validate = (values) => {
@@ -88,13 +93,9 @@ const AddTickets = (props) => {
             errors.startDate = "Cannot be  blank";
         } else if (!dateR.test(values.startDate)) {
             errors.startDate = "Invalid dob format"
-        }
-        else {
-
-
+        } else {
             if (dsp < 0) {
-                errors.startDate = "you can chooes only Current and future Date";
-
+                errors.startDate = "You can chooes only current and future Date";
             }
         }
 
@@ -103,16 +104,10 @@ const AddTickets = (props) => {
         } else if (!dateR.test(values.endDate)) {
             errors.endDate = "Invalid dob format"
         } else {
-
-
             if (daysDiff < 0) {
-                errors.endDate = "you can chooes only Current and future Date";
-
+                errors.endDate = "You can chooes only current and future Date";
             }
         }
-
-
-
         return errors;
     };
 
@@ -120,16 +115,11 @@ const AddTickets = (props) => {
         e.preventDefault()
         setFormErrors(validate(ticketValues));
         setIsSubmitting(true);
-
-
-
-
     }
 
     useEffect(async () => {
         if (Object.keys(formErrors).length === 0 && isSubmitting) {
-          
-             await Tickets();
+            await Tickets();
         }
     }, [formErrors])
 
@@ -167,10 +157,10 @@ const AddTickets = (props) => {
         // console.log( ticketValues.dateRange);
 
     }
-  
+
     // console.log(ticketValues);
-
-
+    // const clientTimezoneOffset = new Date().getTimezoneOffset()/60;
+   
 
 
     return (
@@ -198,29 +188,30 @@ const AddTickets = (props) => {
                                         <form className={classes.form} onSubmit={handleSubmit} >
                                             <Grid container className={classes.root} spacing={5}>
                                                 <Grid item xs={3}>
-                                                    <FormControl variant="outlined" style={{ width : '100%'}} >
-                                                        <InputLabel id="demo-simple-select-outlined-label">leave-Type</InputLabel>
+                                                    <FormControl variant="outlined" style={{ width: '100%' }} >
+                                                        <InputLabel id="demo-simple-select-outlined-label">Leave-Type</InputLabel>
                                                         <Select
                                                             labelId="demo-simple-select-outlined-label"
                                                             id="demo-simple-select-outlined"
                                                             label="leave-Type"
                                                             name="leaveType"
-                                                            error = {formErrors.leaveType && true}
+                                                            error={formErrors.leaveType && true}
                                                             value={ticketValues.leaveType}
                                                             onChange={handleChange}
                                                             className={formErrors.leaveType && "input-error"}
                                                         >
-                                                            
-                                                            <MenuItem value="full leave">Full-leave</MenuItem>
-                                                            <MenuItem value="half leave">Half-leave</MenuItem>
+                                                            <MenuItem value="full-leave">Full leave</MenuItem>
+                                                            <MenuItem value="half-leave">Half leave</MenuItem>
+                                                            <MenuItem value="sick-leave">Sick leave</MenuItem>
+                                                            <MenuItem value="early-leave">Early leave</MenuItem>
                                                         </Select>
                                                     </FormControl>
-                                                        {formErrors.leaveType && (
-                                                            <span className="error">{formErrors.leaveType}</span>
-                                                        )}
+                                                    {formErrors.leaveType && (
+                                                        <span className="error">{formErrors.leaveType}</span>
+                                                    )}
                                                 </Grid>
 
-                                                
+
                                                 <Grid item xs={4}>
                                                     <TextField
                                                         fullWidth
@@ -267,7 +258,7 @@ const AddTickets = (props) => {
 
                                                 </Grid>
 
-                                                     <Grid item xs={7}>
+                                                <Grid item xs={7}>
                                                     <TextField
                                                         fullWidth
                                                         multiline
@@ -285,7 +276,7 @@ const AddTickets = (props) => {
                                                     {formErrors.ticketMesasge && (
                                                         <span className="error">{formErrors.ticketMesasge}</span>
                                                     )}
-                                                </Grid>    
+                                                </Grid>
 
 
                                             </Grid>
@@ -296,7 +287,7 @@ const AddTickets = (props) => {
 
                                             <Grid container className={classes.root} spacing={3}>
                                                 <Grid item xs={4} style={{ display: 'flex' }}>
-                                                    <Button type="submit"  onClick={(e) => { diffday() }}style={{ marginTop: "10px" }} variant="contained" color="primary">Save</Button>
+                                                    <Button type="submit" onClick={(e) => {diffday()}} style={{ marginTop: "10px" }} variant="contained" color="primary">Save</Button>
                                                     <Button type="button" style={{ marginTop: "10px" }} onClick={(e) => { e.preventDefault(); props.history.push('/tickets') }}>Cancel</Button>
                                                 </Grid>
                                                 <Grid item xs={4}></Grid>

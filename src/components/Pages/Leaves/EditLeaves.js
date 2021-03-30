@@ -28,10 +28,10 @@ import moment from 'moment';
 
 
 const inileaves = {
-    leaveName: null,
-    dateRange: null,
-    startDate: null,
-    endDate: null,
+    leaveName: "",
+    dateRange: "",
+    startDate: "",
+    endDate: "",
     leave_id: 0,
 }
 

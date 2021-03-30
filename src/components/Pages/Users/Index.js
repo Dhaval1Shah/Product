@@ -13,6 +13,8 @@ class User extends Component {
     super(props);
     this.state = {
       users: [],
+      count: 0,
+      pageStatus:false,
       tableTh: [
         { id: 'name', numeric: false, disablePadding: true, label: 'Name', sortable: true },
         { id: 'email', numeric: false, disablePadding: true, label: 'Email', sortable: true },
@@ -32,7 +34,6 @@ class User extends Component {
   }
 
   componentWillReceiveProps(props) {
-    console.log(props.authToken);
     if (props && props.authToken === false) {
       props.history.push('/login');
     }
@@ -41,7 +42,8 @@ class User extends Component {
   userData = async (e) => {
     let users = await AuthApi.getData();
     if (users && users.status === true) {
-      this.setState({ users: users.data })
+      this.setState({ users: users.data,
+        count: users.data.length })
     }
   }
 
@@ -54,7 +56,14 @@ class User extends Component {
       if (confirm) {
         let currentUser = await AuthApi.userDelete(id);
         if (currentUser && currentUser.status === true) {
+          this.setState({
+            pageStatus:true
+          })
           this.userData();
+          setTimeout(
+            () => this.setState({  pageStatus:false }), 
+            500
+          );
         } else {
         }
       }
@@ -85,6 +94,8 @@ class User extends Component {
                 {...this.props}
                 tableTh={this.state.tableTh}
                 tableData={this.state.users}
+                tableCount={this.state.count}
+                tablePagestatus={this.state.pageStatus}
                 colNameToShow={['name', 'email', 'created_at']}
                 openPopUp={false}
                 removeRow={this.removeUser}

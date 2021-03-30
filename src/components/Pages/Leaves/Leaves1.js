@@ -13,6 +13,8 @@ class Leave extends Component {
     super(props);
     this.state = {
       leaves: [],
+      pageStatus:false,
+      count: 0,
       tableTh: [
         { id: 'name', numeric: false, disablePadding: true, label: 'Leave-Name', sortable: true },
         { id: 'no', numeric: false, disablePadding: true, label: 'No_of_days', sortable: true },
@@ -44,7 +46,8 @@ class Leave extends Component {
       // console.log(leaves);
       if(leaves && leaves.status === true) {
         this.setState({
-          leaves : leaves.data
+          leaves : leaves.data,
+          count: leaves.data.length
         })
       }
      
@@ -60,7 +63,14 @@ class Leave extends Component {
             if (confirm) {
               let currentLeave = await AuthApi.leaveDelete(id);
               if (currentLeave && currentLeave.status === true) {
+                this.setState({
+                  pageStatus:true
+                })
                 this.leaveData();
+                setTimeout(
+                  () => this.setState({  pageStatus:false }), 
+                  500
+                );
               } else {
               }
             }
@@ -93,6 +103,8 @@ class Leave extends Component {
                 {...this.props}
                 tableTh={this.state.tableTh}
                 tableData={this.state.leaves}
+                tableCount={this.state.count}
+                tablePagestatus={this.state.pageStatus}
                 colNameToShow={['name', 'no_of_days', 'created_at']}
                 openPopUp={false}
                 removeRow={this.removeLeaves}

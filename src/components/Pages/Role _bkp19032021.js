@@ -27,8 +27,6 @@ class Role extends Component {
     super(props)
     this.state = {
       role: false,
-      count: 0,
-      pageStatus:false,
       setopen: false,
       roleName: false,
       permission: false,
@@ -66,8 +64,7 @@ class Role extends Component {
   roleData = async (e) => {
     let role = await AuthApi.getRole();
     this.setState({
-      role: role.data,
-      count: role.data.length,
+      role: role.data
     })
   }
 
@@ -133,31 +130,22 @@ class Role extends Component {
       this.updateRoleee(this.state.roleId)
     }
   }
-  
+
   async removeRole(id) {
     swal({
       title: "Are you sure?",
       icon: "warning",
-      buttons: ["Cancel", "Yes"],
+      buttons: ["Cancel", "Yes"]
     }).then(async (confirm) => {
       if (confirm) {
         let currentRole = await AuthApi.deleteRole(id);
         if (currentRole && currentRole.status === true) {
-          this.setState({
-            pageStatus:true
-          })
           this.roleData();
-          setTimeout(
-            () => this.setState({  pageStatus:false }), 
-            500
-          );
         } else {
         }
       }
-      // console.log(this.props.page);
     });
   }
-
 
   updatChange(e) {
     this.setState({ roleName: e.target.value })
@@ -191,9 +179,6 @@ class Role extends Component {
                 {...this.props}
                 tableTh={this.state.tableTh}
                 tableData={this.state.role}
-                tableCount={this.state.count}
-                tablePage={this.state.page}
-                tablePagestatus={this.state.pageStatus}
                 colNameToShow={['name', 'created_at']}
                 openPopUp={this.handleClickOpen}
                 openPopUpUpdate={this.handleClickOpenUpdateRole}
@@ -240,7 +225,7 @@ class PopUp extends Component {
     this.props.updateCheckbox(value);
   }
 
-  componentWillReceiveProps() {
+  componentDidReceiveProps() {
     if (typeof this.props.rolePermission !== 'undefined' && Object.keys(this.props.rolePermission).length > 0) {
       this.setState({ loading: false })
     }
@@ -263,9 +248,9 @@ class PopUp extends Component {
               <PageLoader />
               : */}
               <div><DialogContent>
-                {/* <DialogContentText> */}
-                  <TextField autoFocus name="name" label="Name" type="text" value={(this.props.roleName && this.props.roleName !== false) ? this.props.roleName : ""} onChange={(e) => { this.props.updatChange(e) }} />
-                {/* </DialogContentText> */}
+                <DialogContentText>
+                  <TextField autoFocus name="name" label="Name" type="text" value={(this.props.roleName && this.props.roleName !== false) ? this.props.roleName : null} onChange={(e) => { this.props.updatChange(e) }} />
+                </DialogContentText>
               </DialogContent>
 
                 <DialogContent>

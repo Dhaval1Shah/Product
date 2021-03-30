@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -23,6 +23,7 @@ import AuthApi from '../Services/Authapi';
 import ls from "local-storage";
 import Logo from "../../Images/logo.png";
 import FontAwesomeIconComponent from './FontAwesomeIconComponent';
+import Nav from './Nav';
 
 const drawerWidth = 240;
 
@@ -35,8 +36,6 @@ export default function MiniDrawer(props) {
   
 
 
-
-  
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -52,6 +51,7 @@ export default function MiniDrawer(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
 
 
   const logOut = async (e) => {
@@ -70,6 +70,15 @@ export default function MiniDrawer(props) {
     await AuthApi.outTime();
   }
 
+ 
+ 
+  // useEffect(
+  //   () =>
+  //   setTimeout(() => {
+  //     console.log(props.roles)
+  //   }, 10000));
+
+// console.log(props.roles)
 
   return (
     <div className={classes.root}>
@@ -145,18 +154,19 @@ export default function MiniDrawer(props) {
           </IconButton>
         </div>
         <Divider />
-
         <List>
-          <Tooltip title="Dashabord" placement="right">
+          {/* <Tooltip title="Dashabord" placement="right">
             <ListItem button onClick={(e) => { e.preventDefault(); props.history.push('/dashboard') }}  >
               <ListItemIcon>
                 <FontAwesomeIconComponent classes="fa fa-home" colorName="primary" fontSize={"small"} />
               </ListItemIcon>
               <ListItemText primary="Dashabord" />
             </ListItem>
-          </Tooltip>
+          </Tooltip> */}
+          <Nav onClick={(e) => { e.preventDefault(); props.history.push('/dashboard') }} classes="fa fa-home" primary="Dashabord" title="Dashabord" placement="right" />
+      
           {/* <Tooltip title="Manage Permission" placement="right" style={{ display: (props.authUser && props.authUser.userAccess && props.authUser.userAccess.length > 0 && props.authUser.userAccess.indexOf('manage-permission') > -1) ? "flex" : "none" }} > */}
-          <Tooltip title="Manage Permission" placement="right" >
+          {/* <Tooltip title="Manage Permission" placement="right" >
             <ListItem button onClick={(e) => { props.history.push('/permission') }} >
               <ListItemIcon>
                 <FontAwesomeIconComponent classes="fa fa-lock" colorName="primary" fontSize={"small"} />
@@ -187,15 +197,24 @@ export default function MiniDrawer(props) {
               </ListItemIcon>
               <ListItemText primary= "Leaves & Holidays" />
             </ListItem>
-          </Tooltip>
-          <Tooltip title="Leave Tickets" placement="right">
+          </Tooltip> */}
+          {ls('roles') === 'Super Admin' ? 
+             [<Nav onClick={(e) => { e.preventDefault(); props.history.push('/permission') }} classes="fa fa-lock" primary="Manage Permission" title="Manage Permission" placement="right" />,
+             <Nav onClick={(e) => { e.preventDefault(); props.history.push('/role') }}  classes="fa fa-user" primary="Manage Role" title="Manage Role" placement="right" />,
+             <Nav onClick={(e) => { e.preventDefault(); props.history.push('/users') }} classes="fa fa-users"  primary="Manage Users" title="Manage Users" placement="right" />,
+             <Nav onClick={(e) => { e.preventDefault(); props.history.push('/leaves') }} classes="fas fa-sign-out-alt" primary= "Leaves & Holidays" title="Leaves & Holidays" placement="right" />]
+          : null
+          }
+          {/* <Tooltip title="Leave Tickets" placement="right">
             <ListItem button onClick={(e) => { e.preventDefault(); props.history.push('/tickets') }} >
               <ListItemIcon>
                 <FontAwesomeIconComponent classes="fas fa-ticket-alt" colorName="primary" fontSize={"small"} />
               </ListItemIcon>
               <ListItemText primary= "Leaves Tickets" />
             </ListItem>
-          </Tooltip>
+          </Tooltip> */}
+          <Nav onClick={(e) => { e.preventDefault(); props.history.push('/tickets') }} classes="fas fa-ticket-alt" primary="Leaves Tickets" title="Leave Tickets" placement="right" />
+
        
         </List>
       </Drawer>

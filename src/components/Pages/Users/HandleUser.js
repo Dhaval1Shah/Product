@@ -27,32 +27,32 @@ import AddForm from '../../Layouts/Forms/UserForms/AddForm';
 
 
 class HandleUser extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            users: {
-                firstName: null,
-                lastName: null,
-                email: null,
-                gender: null,
-                dob: null,
-                photo: null,
-                qualification: null,
-                last_organization: null,
-                password: null,
-                roleName: null,
-            },
-            role: false,
-        }
-    //     this.handleSubmit = this.handleSubmit.bind(this);
-    //     this.updateChange = this.updateChange.bind(this);
-    //     this.imgUpload = this.imgUpload.bind(this);
-    //     this.removeImg = this.removeImg.bind(this);
-    //     this.createUser = this.createUser.bind(this);
-    //    this.roleData_class = this.roleData_class.bind(this);
-    //     this.addRole = this.addRole.bind(this);
-    //    this.roleData_class();
-    }
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         users: {
+    //             firstName: null,
+    //             lastName: null,
+    //             email: null,
+    //             gender: null,
+    //             dob: null,
+    //             photo: null,
+    //             qualification: null,
+    //             last_organization: null,
+    //             password: null,
+    //             roleName: null,
+    //         },
+    //         role: false,
+    //     }
+    // //     this.handleSubmit = this.handleSubmit.bind(this);
+    // //     this.updateChange = this.updateChange.bind(this);
+    // //     this.imgUpload = this.imgUpload.bind(this);
+    // //     this.removeImg = this.removeImg.bind(this);
+    // //     this.createUser = this.createUser.bind(this);
+    // //    this.roleData_class = this.roleData_class.bind(this);
+    // //     this.addRole = this.addRole.bind(this);
+    // //    this.roleData_class();
+    // }
 
     componentWillMount() {
         if (this.props && this.props.authToken === false) {
@@ -62,93 +62,92 @@ class HandleUser extends Component {
       }
     
       componentWillReceiveProps(props) {
-        console.log(props.authToken);
         if (props && props.authToken === false) {
           props.history.push('/login');
         }
       }
 
 
-    async handleSubmit(e) {
-        await this.createUser();
+    // async handleSubmit(e) {
+    //     await this.createUser();
 
-    }
+    // }
 
-    addRole(e) {
-        let roleName = [];
-        roleName.push(e.target.value)
-        this.setState({
-            users: { ...this.state.users, roleName: e.target.value }
-        })
-    }
+    // addRole(e) {
+    //     let roleName = [];
+    //     roleName.push(e.target.value)
+    //     this.setState({
+    //         users: { ...this.state.users, roleName: e.target.value }
+    //     })
+    // }
 
-    updateChange(e) {
-        this.setState({
-            users: { ...this.state.users, [e.target.name]: e.target.value }
-        })
+    // updateChange(e) {
+    //     this.setState({
+    //         users: { ...this.state.users, [e.target.name]: e.target.value }
+    //     })
 
-    }
+    // }
 
 
-    roleData_class = async () => {
-        let role = await AuthApi.getRole();
-        this.setState({
-            role: role.data
-        })
-        console.log(this.state.role)
-    }
+    // roleData_class = async () => {
+    //     let role = await AuthApi.getRole();
+    //     this.setState({
+    //         role: role.data
+    //     })
+    //     console.log(this.state.role)
+    // }
 
-    async imgUpload(e) {
-        const postData = new FormData();
-        postData.append('file', e.target.files[0]);
-        let updateImg = await AuthApi.updateImg(postData);
-        if (updateImg && updateImg.status === true) {
-            this.setState({
-                users: { ...this.state.users, photo: updateImg.data.image_url }
-            })
-            this.setState({ uploadedImgName: updateImg.data.image_name })
-        }
-    }
+    // async imgUpload(e) {
+    //     const postData = new FormData();
+    //     postData.append('file', e.target.files[0]);
+    //     let updateImg = await AuthApi.updateImg(postData);
+    //     if (updateImg && updateImg.status === true) {
+    //         this.setState({
+    //             users: { ...this.state.users, photo: updateImg.data.image_url }
+    //         })
+    //         this.setState({ uploadedImgName: updateImg.data.image_name })
+    //     }
+    // }
 
-    async removeImg(e) {
-        let imageLink = this.state.users.photo;
-        imageLink = imageLink.substr(imageLink.indexOf('/', 7) + 1)
-        let remImg = await AuthApi.deleteImg(imageLink);
-        if (remImg && remImg.status === true) {
-            this.setState({
-                users: { ...this.state.users, photo: null }
-            })
-            this.setState({ uploadedImgName: null })
-        } else {
+    // async removeImg(e) {
+    //     let imageLink = this.state.users.photo;
+    //     imageLink = imageLink.substr(imageLink.indexOf('/', 7) + 1)
+    //     let remImg = await AuthApi.deleteImg(imageLink);
+    //     if (remImg && remImg.status === true) {
+    //         this.setState({
+    //             users: { ...this.state.users, photo: null }
+    //         })
+    //         this.setState({ uploadedImgName: null })
+    //     } else {
 
-        }
+    //     }
 
-    }
+    // }
 
-    async createUser() {
-        let create = await Authapi.createUser(this.state.users)
-        if (create && create.status === true) {
-            this.props.history.push('/users');
-        } else {
-            swal({
-                title: "OOPS!",
-                icon: "fail",
-                message: "Something went wrong, Please try later!"
-            })
-        }
-    }
+    // async createUser() {
+    //     let create = await Authapi.createUser(this.state.users)
+    //     if (create && create.status === true) {
+    //         this.props.history.push('/users');
+    //     } else {
+    //         swal({
+    //             title: "OOPS!",
+    //             icon: "fail",
+    //             message: "Something went wrong, Please try later!"
+    //         })
+    //     }
+    // }
 
     render() {
         const classes = this.props;
-        let roleOptions = [];
-        if (Object.keys(this.state.role).length > 0) {
-            Object.keys(this.state.role).forEach((key) => {
-                roleOptions.push(<MenuItem value={this.state.role[key].name}>{this.state.role[key].name}</MenuItem>)
-            })
-        }
-        else {
-            roleOptions.push(<MenuItem value=""><em>Select Role</em></MenuItem>);
-        }
+        // let roleOptions = [];
+        // if (Object.keys(this.state.role).length > 0) {
+        //     Object.keys(this.state.role).forEach((key) => {
+        //         roleOptions.push(<MenuItem value={this.state.role[key].name}>{this.state.role[key].name}</MenuItem>)
+        //     })
+        // }
+        // else {
+        //     roleOptions.push(<MenuItem value=""><em>Select Role</em></MenuItem>);
+        // }
         return (
             <div>
                 <Header
