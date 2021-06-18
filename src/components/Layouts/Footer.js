@@ -6,7 +6,7 @@ class Footer extends Component {
   }
 
   render() {
-    return <div className="footer"> <p> Developed By: CPSI</p></div>
+    return <div className="footer"> <p> Developed By: Dhaval Shah</p></div>
   }
 }
 

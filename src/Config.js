@@ -1,5 +1,5 @@
 export default {
-    apiurl: (process.env.NODE_ENV === 'development') ? "http://cspi-ems-api.localhost.com/" : "http://emsapi.cherrypiksoftware.com/",
+    apiurl: (process.env.NODE_ENV === 'development') ? "http://cspi-ems-api.localhost.com/" : "https://emsapi.cherrypiksoftware.com/",
     authApis: {
         login: "api/auth/login",
         logout: "api/auth/logout",
@@ -31,6 +31,22 @@ export default {
         singleLeave: "api/holiday-leave/",
         createTicket: "api/leave",
         EditTicket: "api/leave/update-status/",
-        singleTicket: "api/leave/edit-status/"
+        singleTicket: "api/leave/edit-status/",
+        getAttandance: "api/users/get-working-duration/",
+        getEvent: "api/event/",
+        createEvent: "api/event",
+        DeleteEvent: "api/event/",
+        singleEvent: "api/event/",
+        editEvent: "api/event/",
+        removeImage: "api/removeEventImage/",
+        createUpcomingEvent: "api/upcomingevent",
+        uploadEventImg: "api/uploadEventFile",
+        getAllEvent: "api/upcomingevent",
+        AllDeleteEvent: "api/upcomingevent/",
+        singleUpcomingEvent: "api/upcomingevent/",
+        EditupcomingEvent: "api/upcomingevent/",
+        deleteUpcomingImage: "api/removeEventFile",
+        addSalary: "api/users/add-salary/",
+        AllSalarydata: "api/user/salary/"
     }
 };

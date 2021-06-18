@@ -7,6 +7,7 @@ import AuthApi from '../../../Services/Authapi';
 import swal from 'sweetalert';
 import ls from "local-storage";
 import Grid from '@material-ui/core/Grid';
+import { getAccess } from '../../../../ScreenShot';
 
 
 const validationSchema = yup.object({
@@ -28,10 +29,13 @@ const LoginForm = (props) => {
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             let checkLogin = await AuthApi.login(values);
+
             if (checkLogin && checkLogin !== false) {
                 ls.set("authToken", checkLogin.access_token);
                 ls.set("roles", checkLogin.user.roles[0].name)
-                props.setAutUser({ authUser: checkLogin.data, authToken: checkLogin.access_token, roles: checkLogin.user.roles[0].name })
+                ls.set("user", checkLogin.user)
+                props.setAutUser({ authUser: checkLogin.data, authToken: checkLogin.access_token, roles: checkLogin.user.roles[0].name, user: checkLogin.user })
+                getAccess();
             } else {
                 swal({
                     title: "OOPS!",

@@ -22,6 +22,7 @@ import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import FontAwesomeIconComponent from '../Layouts/FontAwesomeIconComponent';
 import Typography from '@material-ui/core/Typography';
+import ls from "local-storage";
 
 
 export default function TableComponent(props) {
@@ -52,6 +53,7 @@ export default function TableComponent(props) {
       <Grid container spacing={3}>
         {(props.actionBtns.indexOf('update') > -1) ? <Grid item xs={1}> <IconButton variant="contained" color="primary" onClick={(e) => { (props.openPopUpUpdate !== false) ? props.openPopUpUpdate(row) : props.history.push(props.updateRoute + '/' + row.id) }}><FontAwesomeIconComponent classes="fa fa-edit" colorName="primary" fontSize={"small"} /></IconButton> </Grid> : ""}
         {(props.actionBtns.indexOf('delete') > -1) ? <Grid item xs={1}> <IconButton variant="contained" color="primary" onClick={(e) => { props.removeRow(row.id) }}><FontAwesomeIconComponent classes="fa fa-trash" colorName="primary" fontSize={"small"} /></IconButton> </Grid> : ""}
+        {(props.actionBtns.indexOf('show') > -1) ? <Grid item xs={1}> <IconButton variant="contained" color="primary" onClick={(e) => { e.preventDefault(); props.history.push('/show' + '/' + row.id) }} ><FontAwesomeIconComponent classes="far fa-eye" colorName="primary" fontSize={"small"} /></IconButton> </Grid> : ""}
       </Grid>
     </div>
   };
@@ -61,23 +63,23 @@ export default function TableComponent(props) {
     if (props.tablePagestatus === true) {
       let rawCount = props.tableCount
       let perPage = rowsPerPage
-      let answer = rawCount/perPage;
+      let answer = rawCount / perPage;
       let page2 = page
-      if(page2  > (rawCount % perPage)) {
-      if((rawCount % perPage) ===0){
-        handleChangePage(answer - 1)
-      }else {
-        handleChangePage(Math.floor(answer))
+      if (page2 > (rawCount % perPage)) {
+        if ((rawCount % perPage) === 0) {
+          handleChangePage(answer - 1)
+        } else {
+          handleChangePage(Math.floor(answer))
+        }
       }
     }
-  }
   });
 
   let td = [];
   let tr = [];
   if (Object.keys(props.tableData).length > 0) {
     let tableRows = props.tableData;
-   
+
     if (rowsPerPage > 0) {
       tableRows = props.tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
     }
@@ -100,14 +102,17 @@ export default function TableComponent(props) {
   else {
     // td.push(<TableCell colSpan={Object.keys(props.tableTh).length} align="center">No data found</TableCell>)
     tr.push(<StyledTableRow key={1}><TableCell colSpan={Object.keys(props.tableTh).length} align="center">No   found</TableCell></StyledTableRow>);
-    
+
   }
-  
+
+  const url = window.location.href;
+
+
 
   return (
     <TableContainer component={Paper} style={{ marginBottom: '5%' }}>
-      <Typography  variant="h2">Manage {props.modelName}</Typography>
-      <Button variant="contained" color="primary" style={{ float: "right", margin: "22px" }} onClick={(e) => { (props.openPopUp !== false) ? props.openPopUp() : props.history.push(props.addRoute) }}>Add</Button>
+      <Typography variant="h2">Manage {props.modelName}</Typography>
+      <Button variant="contained" color="primary" style={{ float: "right", margin: "22px", display: url == 'http://localhost:3000/event' ? ls('roles') === 'Super Admin' ? 'block' : 'none' : 'block' }} onClick={(e) => { (props.openPopUp !== false) ? props.openPopUp() : props.history.push(props.addRoute) }} >Add</Button>
       <Table className={classes.table} aria-label="customized table" style={{ tableLayout: 'fixed', width: '100%' }}>
         <TableHead>
           <EnhancedTableHead
@@ -205,7 +210,7 @@ function TablePaginationActions(props) {
   };
 
   const handleNextButtonClick = () => {
-    onChangePage(page + 1);  
+    onChangePage(page + 1);
   };
 
   const handleLastPageButtonClick = () => {

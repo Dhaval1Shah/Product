@@ -115,7 +115,7 @@ const Addform = (props) => {
         return errors;
     };
 
-   
+
 
 
     async function RoleData() {
@@ -144,6 +144,7 @@ const Addform = (props) => {
     const imgUpload = async (e) => {
         const postData = new FormData();
         postData.append('file', e.target.files[0]);
+        console.log(postData);
         let updaImg = await AuthApi.updateImg(postData);
         if (updaImg && updaImg.status === true) {
 
@@ -154,7 +155,7 @@ const Addform = (props) => {
             })
 
         }
-      
+
     }
 
     const removeImg = async (e) => {
@@ -180,7 +181,7 @@ const Addform = (props) => {
         setFormErrors(validate(formValues));
         setIsSubmitting(true);
 
-        
+
 
     }
 
@@ -219,11 +220,11 @@ const Addform = (props) => {
                             name="firstName"
                             label="FirstName"
                             variant="outlined"
-                            error = {formErrors.firstName && true}
+                            error={formErrors.firstName && true}
                             value={formValues.firstName}
                             onChange={handleChange1}
                             className={formErrors.firstName && "input-error"}
-                            
+
                         />
                         {formErrors.firstName && (
                             <span className="error">{formErrors.firstName}</span>
@@ -236,7 +237,7 @@ const Addform = (props) => {
                             name="lastName"
                             label="LastName"
                             variant="outlined"
-                            error = {formErrors.lastName && true}
+                            error={formErrors.lastName && true}
                             value={formValues.lastName}
                             onChange={handleChange1}
                             className={formErrors.lastName && "input-error"}
@@ -253,7 +254,7 @@ const Addform = (props) => {
                             name="email"
                             label="Email"
                             variant="outlined"
-                            error = {formErrors.email && true}
+                            error={formErrors.email && true}
                             value={formValues.email}
                             onChange={handleChange1}
                             className={formErrors.email && "input-error"}
@@ -293,7 +294,7 @@ const Addform = (props) => {
                             label="Birthday"
                             name="dob"
                             type="date"
-                            error = {formErrors.dob && true}
+                            error={formErrors.dob && true}
                             value={formValues.dob}
                             onChange={handleChange1}
                             className={formErrors.dob && "input-error"}
@@ -361,7 +362,7 @@ const Addform = (props) => {
                         name="qualification"
                         label="Qualification"
                         variant="outlined"
-                        error = {formErrors.qualification && true}
+                        error={formErrors.qualification && true}
                         value={formValues.qualification}
                         onChange={handleChange1}
                         className={formErrors.dob && "input-error"}
@@ -377,7 +378,7 @@ const Addform = (props) => {
                         name="last_organization"
                         label="Last Organization"
                         variant="outlined"
-                        error = {formErrors.last_organization && true}
+                        error={formErrors.last_organization && true}
                         value={formValues.last_organization}
                         onChange={handleChange1}
                         className={formErrors.last_organization && "input-error"}
@@ -393,7 +394,7 @@ const Addform = (props) => {
                         type="password"
                         label="Password"
                         variant="outlined"
-                        error = {formErrors.password && true}
+                        error={formErrors.password && true}
                         value={formValues.password}
                         onChange={handleChange1}
                         className={formErrors.password && "input-error"}
@@ -413,7 +414,7 @@ const Addform = (props) => {
                                 id="demo-simple-select-outlined"
                                 name="roleName"
                                 label="Role"
-                                error = {formErrors.roleName && true}
+                                error={formErrors.roleName && true}
                                 value={formValues.roleName}
                                 onChange={handleChange1}
                                 className={formErrors.roleName && "input-error"}
@@ -423,11 +424,11 @@ const Addform = (props) => {
                                 {roleOptions}
 
                             </Select>
-                           
+
                         </FormControl>
                         {formErrors.roleName && (
-                                <span className="error">{formErrors.roleName}</span>
-                            )}
+                            <span className="error">{formErrors.roleName}</span>
+                        )}
 
                     </Grid>
                     <Grid item xs={4} ></Grid>
@@ -435,7 +436,7 @@ const Addform = (props) => {
                 </Grid>
                 <Grid container className={classes.root} spacing={3}>
                     <Grid item xs={4} style={{ display: 'flex' }}>
-                        <Button type="submit" variant="contained"  color="primary">Save</Button>
+                        <Button type="submit" variant="contained" color="primary">Save</Button>
                         <Button type="button" onClick={(e) => { e.preventDefault(); props.history.push('/users') }}>Cancel</Button>
                     </Grid>
                     <Grid item xs={4}></Grid>

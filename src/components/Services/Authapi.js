@@ -6,7 +6,8 @@ import moment from 'moment';
 export default new (class AuthApi {
     setHeaders(type) {
         let authToken = (ls.get("authToken") && ls.get("authToken") !== null && ls.get("authToken") !== false) ? ls.get("authToken") : "";
-        axios.defaults.headers[type]['Content-Type'] = 'application/json;charset=utf-8';
+        axios.defaults.headers[type]['Content-Type'] = 'multipart/form-data';
+        // axios.defaults.headers[type]['Content-Type'] = 'application/json;charset=utf-8';
         axios.defaults.headers[type]['Access-Control-Allow-Origin'] = '*';
         axios.defaults.headers[type]['Authorization'] = `Bearer ${authToken}`;
 
@@ -618,5 +619,339 @@ export default new (class AuthApi {
         }
     }
 
+
+    async getAttandance(durMonth, year) {
+        try {
+            const url = config.apiurl + config.apis.getAttandance + durMonth + '/' + year;
+
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+    async getEvent(month, year) {
+        try {
+            const url = config.apiurl + config.apis.getEvent + month + '/' + year;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+    async createEvent(postDatas, postImages) {
+        try {
+            const url = config.apiurl + config.apis.createEvent;
+            let postData = {
+                'name': postDatas.eventName,
+                'date': postDatas.eventdate,
+                'images': postImages,
+            }
+            console.log(postData)
+            this.setHeaders('post');
+            let data = await axios
+                .post(url, postData)
+                .then((res) => {
+                    console.log(res)
+                    return res.data;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+    async eventDelete(id) {
+        try {
+            const url = config.apiurl + config.apis.DeleteEvent + id;
+            this.setHeaders('delete');
+            let data = await axios
+                .delete(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async singleEvent(id) {
+        try {
+            const url = config.apiurl + config.apis.singleEvent + id;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+    async updateEvent(event, id, postImages) {
+        try {
+            const url = config.apiurl + config.apis.editEvent + id;
+            this.setHeaders('put');
+            let postData = {
+                'name': event.eventName,
+                'date': event.eventdate,
+                'images': postImages,
+
+
+            }
+            let data = await axios
+                .put(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+    async imageRemove(id, key) {
+        try {
+            const url = config.apiurl + config.apis.removeImage + id + "/" + key;
+            console.log(url);
+            this.setHeaders('delete');
+            let data = await axios
+                .delete(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async createUpcomingEvent(postDatas) {
+        try {
+            const url = config.apiurl + config.apis.createUpcomingEvent;
+            let postData = {
+                'name': postDatas.upcomingEventName,
+                'date': postDatas.upcomingEventdate,
+                'description': postDatas.description,
+                'image': postDatas.image,
+            }
+            this.setHeaders('post');
+            let data = await axios
+                .post(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async uploadEventImg(postData) {
+        try {
+            const url = config.apiurl + config.apis.uploadEventImg;
+            this.setHeaders('post', true);
+            let data = await axios
+                .post(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async getAllEvents() {
+        try {
+            const url = config.apiurl + config.apis.getAllEvent;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async AlleventDelete(id) {
+        try {
+            const url = config.apiurl + config.apis.AllDeleteEvent + id;
+            this.setHeaders('delete');
+            let data = await axios
+                .delete(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async singleUpcomingEvent(id) {
+        try {
+            const url = config.apiurl + config.apis.singleUpcomingEvent + id;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async updateUpcomingEvent(postDatas, id) {
+        try {
+            const url = config.apiurl + config.apis.EditupcomingEvent + id;
+            this.setHeaders('put');
+            let postData = {
+                'name': postDatas.upcomingEventName,
+                'date': postDatas.upcomingEventdate,
+                'description': postDatas.description,
+                'image': postDatas.image,
+            }
+            let data = await axios
+                .put(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async upcomingdeleteImg(image) {
+        try {
+            const url = config.apiurl + config.apis.deleteUpcomingImage;
+            console.log(url);
+            this.setHeaders('post');
+            let postData = {
+                'file': image
+            }
+            let data = await axios
+                .post(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+
+    async addSalary(event, id) {
+        try {
+            const url = config.apiurl + config.apis.addSalary + id;
+            this.setHeaders('put');
+            let postData = {
+                'salary': event.salary
+            }
+            let data = await axios
+                .put(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+
+    async getAllSalaryData(month, year) {
+        try {
+            const url = config.apiurl + config.apis.AllSalarydata + month + '/' + year;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
 
 })();

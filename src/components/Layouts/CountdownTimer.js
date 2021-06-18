@@ -22,7 +22,11 @@ export default class CountdownTimer extends Component {
             this.scnd();
         }
 
+
     }
+
+
+
 
     // componentWillUnmount() {
     //     this.props.updateCounter(this.state.count);
@@ -40,10 +44,11 @@ export default class CountdownTimer extends Component {
     //     console.log(this.state.count);
     // };
 
+
     scnd = async () => {
         let timeCount = await AuthApi.durTime();
         // console.log(timeCount);
-        this.props.updateCounterOnload(parseInt(timeCount.totalDurationInSec));     
+        this.props.updateCounterOnload(parseInt(timeCount.totalDurationInSec));
     }
 
 
@@ -139,6 +144,7 @@ export default class CountdownTimer extends Component {
     render() {
         const { count } = this.props;
         const { className, id } = this.props;
+
         return (
             <Grid container spacing={2} >
                 <Grid item xs={12}>

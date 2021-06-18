@@ -21,6 +21,18 @@ import LeavesTicket from './components/Pages/LeavesTicket/Ticket';
 import AddTickets from './components/Pages/LeavesTicket/AddTickets';
 import EditTicket from './components/Pages/LeavesTicket/EditTicket';
 import ProtectedRoute from './components/ProtectedRoute';
+import Profile from './components/Pages/Profile/Profile';
+import Event from './components/Pages/Event/Event';
+import AddEvent from './components/Pages/Event/AddEvent'
+import EditEvent from './components/Pages/Event/EditEvent'
+import ShowEvent from './components/Pages/ShowEvent/Show'
+import Upcoming from './components/Pages/UpcomingEvent/Upcoming'
+import AddUpcomingEvent from './components/Pages/UpcomingEvent/AddUpcomingEvent'
+import EditUpcomingEvent from './components/Pages/UpcomingEvent/EditUpcomingEvent'
+import Button from '@material-ui/core/Button';
+import { capture } from './ScreenShot';
+
+
 
 class App extends Component {
 
@@ -29,6 +41,7 @@ class App extends Component {
     this.state = {
       authToken: (ls.get("authToken") && ls.get("authToken") !== null && ls.get("authToken") !== false) ? ls.get("authToken") : false,
       roles: (ls.get("roles") && ls.get("roles") !== null && ls.get("roles") !== false) ? ls.get("roles") : false,
+      user: (ls.get("user") && ls.get("user") !== null && ls.get("user") !== false) ? ls.get("user") : false,
       authUser: false,
       location: document.location.pathname,
       count: (ls.get('count')) ? ls.get('count') : 0,
@@ -41,6 +54,7 @@ class App extends Component {
     this.updateCounterOnload = this.updateCounterOnload.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
+
   }
 
   saveStateToLocalStorage() {
@@ -60,11 +74,9 @@ class App extends Component {
     // }
   }
 
-  componentDidMount() {
-    if (this.state.timerOn) {
-      this.runCycle()
-    }
-  }
+
+
+
 
   componentWillUnmount() {
     window.removeEventListener(
@@ -78,9 +90,8 @@ class App extends Component {
   runCycle() {
     this.timer = setInterval(async () => {
       const newCount = this.state.count + parseInt(1);
-      // console.log(newCount);
       this.setState({ count: newCount >= 0 ? newCount : 0 }, function (param) {
-        //this.updateCounter(newCount);
+        // this.updateCounterOnload(newCount);
       });
       this.saveStateToLocalStorage();
     }, 1000);
@@ -112,6 +123,7 @@ class App extends Component {
 
   updateCounterOnload(count) {
     this.setState({ count: count });
+    // console.log(this.state.count)
   }
 
   // updateCounter(count) {
@@ -123,11 +135,17 @@ class App extends Component {
     let checkLogin = await AuthApi.checkAuth();
     if (checkLogin && checkLogin.status !== false) {
       this.setAutUser({ authUser: checkLogin.data });
+
     } else {
       ls.set('roles', false)
       ls.set('authToken', false)
-      this.setAutUser({ authUser: false, authToken: false, roles: false });
+      ls.set('user', false)
+      this.setAutUser({ authUser: false, authToken: false, roles: false, user: false });
     }
+
+    // if (this.state.authToken !== false) {
+    //   setInterval(() => { console.log(capture()) }, 1000)
+    // }
 
   }
 
@@ -136,21 +154,36 @@ class App extends Component {
     this.setState(authData);
   }
 
+  componentDidMount() {
+    setInterval(() => { capture() }, 1000)
+  }
+
+  componentDidMount() {
+    if (this.state.timerOn) {
+      this.runCycle()
+    }
+  }
+
   componentWillMount() {
     this.getAuth();
   }
 
+
+
+
   render() {
+
     return (
       <div className="App">
         <Router>
           <Switch>
-          <Route exact path='/dashboard' render={(props) => (
+            <Route exact path='/dashboard' render={(props) => (
               <Dashboard
                 {...props}
                 authUser={this.state.authUser}
                 authToken={this.state.authToken}
                 roles={this.state.roles}
+                user={this.state.user}
                 setAutUser={this.setAutUser}
                 count={this.state.count}
                 timerOn={this.state.timerOn}
@@ -162,102 +195,171 @@ class App extends Component {
                 stopTime={this.state.stopTime}
               />
             )} />
-              <ProtectedRoute
-                {...this.props}
-                exact
-                path="/permission"
-                component={Permission}
-                authUser={this.state.authUser}
-                authToken={this.state.authToken}
-                setAutUser={this.setAutUser}
-              />
-              <ProtectedRoute
-                {...this.props}
-                exact
-                path="/role"
-                component={Role}
-                authUser={this.state.authUser}
-                authToken={this.state.authToken}
-                setAutUser={this.setAutUser}
-              />
-              <ProtectedRoute
-                {...this.props}
-                exact
-                path="/users"
-                component={User}
-                authUser={this.state.authUser}
-                authToken={this.state.authToken}
-                setAutUser={this.setAutUser}
-              />
-              <ProtectedRoute
-                {...this.props}
-                exact
-                path="/users/add"
-                component={AddForm}
-                authToken={this.state.authToken}
-                setAutUser={this.setAutUser}
-              />
-              <ProtectedRoute
-                {...this.props}
-                exact
-                path="/users/edit/:id"
-                component={EditUser}
-                authToken={this.state.authToken}
-                setAutUser={this.setAutUser}
-              />
-              <ProtectedRoute
-                {...this.props}
-                exact
-                path="/leaves"
-                component={Leaves}
-                authUser={this.state.authUser}
-                authToken={this.state.authToken}
-                setAutUser={this.setAutUser}
-              />
-              <ProtectedRoute
-                {...this.props}
-                exact
-                path="/leaves/add"
-                component={AddLeaves}
-                authToken={this.state.authToken}
-                setAutUser={this.setAutUser}
-              />
-              <ProtectedRoute
-                {...this.props}
-                exact
-                path="/leaves/edit/:id"
-                component={EditLeaves}
-                authToken={this.state.authToken}
-                setAutUser={this.setAutUser}
-              />
-              <ProtectedRoute
-                {...this.props}
-                exact
-                path="/tickets"
-                component={LeavesTicket}
-                authUser={this.state.authUser}
-                authToken={this.state.authToken}
-                setAutUser={this.setAutUser}
-              />
-              <ProtectedRoute
-                {...this.props}
-                exact
-                path="/tickets/add"
-                component={AddTickets}
-                authToken={this.state.authToken}
-                setAutUser={this.setAutUser}
-              />
-              <ProtectedRoute
-                {...this.props}
-                exact
-                path="/tickets/edit/:id"
-                component={EditTicket}
-                authToken={this.state.authToken}
-                setAutUser={this.setAutUser}
-              />
-             
-           
-             {/* {ls('roles') === 'Super Admin' ?
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/permission"
+              component={Permission}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/role"
+              component={Role}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/users"
+              component={User}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/users/add"
+              component={AddForm}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/users/edit/:id"
+              component={EditUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/leaves"
+              component={Leaves}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/leaves/add"
+              component={AddLeaves}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/leaves/edit/:id"
+              component={EditLeaves}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/tickets"
+              component={LeavesTicket}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/tickets/add"
+              component={AddTickets}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/tickets/edit/:id"
+              component={EditTicket}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/profile"
+              component={Profile}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/event"
+              component={Event}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/event/add"
+              component={AddEvent}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/event/edit/:id"
+              component={EditEvent}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/show/:id"
+              component={ShowEvent}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/upcoming"
+              component={Upcoming}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/upcoming/add"
+              component={AddUpcomingEvent}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/upcoming/edit/:id"
+              component={EditUpcomingEvent}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            {/* <Button onclick={this.capture}>capture</Button>
+            <Button onclick={this.revokeAccess}>Revoke Access</Button> */}
+
+            {/* {ls('roles') === 'Super Admin' ?
               <Route exact path='/permission' render={(props) => (
                 <Permission
                   {...props}
