@@ -8,29 +8,31 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import swal from 'sweetalert';
 
-class Upcoming extends Component {
+class Check extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            upcoming: [],
+            getData: [],
             count: 0,
             pageStatus: false,
+            isApproved: 0,
             tableTh: [
-                { id: 'name', numeric: false, disablePadding: true, label: 'Name', sortable: true },
                 { id: 'date', numeric: false, disablePadding: true, label: 'Date', sortable: true },
-                { id: 'created_at', numeric: false, disablePadding: true, label: 'Created On', sortable: true },
+                { id: 'intime', numeric: false, disablePadding: true, label: 'In Time', sortable: true },
+                { id: 'outtime', numeric: false, disablePadding: true, label: 'Out Time', sortable: true },
+                { id: 'duration', numeric: false, disablePadding: true, label: 'Durations', sortable: true },
                 { id: 'actions', numeric: false, disablePadding: true, label: 'Actions', sortable: false }
             ]
         }
-        this.eventData = this.eventData.bind(this);
-        this.removeEvent = this.removeEvent.bind(this);
+        this.getUserData = this.getUserData.bind(this);
+        // this.removeUser = this.removeUser.bind(this);
     }
 
     componentWillMount() {
         if (this.props && this.props.authToken === false) {
             this.props.history.push('/login');
         }
-        this.eventData();
+        this.getUserData();
     }
 
     componentWillReceiveProps(props) {
@@ -39,39 +41,33 @@ class Upcoming extends Component {
         }
     }
 
-    eventData = async (e) => {
-        let events = await AuthApi.getAllEvents();
-        if (events && events.status === true) {
-            this.setState({
-                upcoming: events.data,
-                count: events.data.length
-            })
 
+
+
+
+
+
+    getUserData = async (e) => {
+        let userData = await AuthApi.chekUserData();
+        if (userData && userData.status === true) {
+            this.setState({
+                getData: userData.data,
+                count: userData.data.length
+            })
         }
     }
 
-    async removeEvent(id) {
-        swal({
-            title: "Are you sure?",
-            icon: "warning",
-            buttons: ["Cancel", "Yes"]
-        }).then(async (confirm) => {
-            if (confirm) {
-                let currentEvent = await AuthApi.AlleventDelete(id);
-                if (currentEvent && currentEvent.status === true) {
-                    this.setState({
-                        pageStatus: true
-                    })
-                    this.eventData();
-                    setTimeout(
-                        () => this.setState({ pageStatus: false }),
-                        500
-                    );
-                } else {
-                }
-            }
-        });
+    accept = async (id) => {
+        await AuthApi.approveTime("1", id);
+
     }
+
+    async decline(id) {
+        await AuthApi.approveTime("2", id);
+
+    }
+
+
 
     render() {
         const classes = this.props;
@@ -87,8 +83,8 @@ class Upcoming extends Component {
                                 <CardContent>
                                     <Breadcrumb
                                         {...this.props}
-                                        primaryPageName="Upcoming Events"
-                                        primaryPageLink="/upcoming"
+                                        primaryPageName="Check User"
+                                        primaryPageLink="/check"
                                         isSecondaryPage={false}
                                         secondaryPageName="" />
                                 </CardContent>
@@ -96,16 +92,16 @@ class Upcoming extends Component {
                             <TableComponent
                                 {...this.props}
                                 tableTh={this.state.tableTh}
-                                tableData={this.state.upcoming}
+                                tableData={this.state.getData}
                                 tableCount={this.state.count}
                                 tablePagestatus={this.state.pageStatus}
-                                colNameToShow={['name', 'date', 'created_at']}
+                                colNameToShow={['date', 'in_time', 'out_time', 'duration']}
                                 openPopUp={false}
-                                removeRow={this.removeEvent}
-                                actionBtns={['update', 'delete']}
-                                modelName={'Upcoming Event'}
-                                addRoute={'/upcoming/add'}
-                                updateRoute={'/upcoming/edit'}
+                                acceptRow={this.accept}
+                                rejectRow={this.decline}
+                                actionBtns={['approve', 'reject']}
+                                modelName={'Check'}
+                                // updateRoute={'/users/edit'}
                                 openPopUpUpdate={false}
                             /></div>
                     } />
@@ -114,16 +110,4 @@ class Upcoming extends Component {
         )
     }
 }
-export default Upcoming;
-// import React from 'react'
-
-// const Upcoming = () => {
-//     return (
-//         <div>
-//             hy
-//         </div>
-//     )
-// }
-
-
-// export default Upcoming;
+export default Check;

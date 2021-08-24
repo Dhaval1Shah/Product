@@ -47,8 +47,8 @@ const AddLeaves = (props) => {
     useEffect(() => {
         if (props && props.authToken === false) {
             props.history.push('/login');
-          }
-        });
+        }
+    });
 
 
 
@@ -88,7 +88,7 @@ const AddLeaves = (props) => {
             errors.startDate = "Invalid dob format"
         }
         else {
-          
+
 
             if (dsp < 0) {
                 errors.startDate = "you can chooes only Current and future Date";
@@ -101,7 +101,7 @@ const AddLeaves = (props) => {
         } else if (!dateR.test(values.endDate)) {
             errors.endDate = "Invalid dob format"
         } else {
-            
+
 
             if (daysDiff < 0) {
                 errors.endDate = "you can chooes only Current and future Date";
@@ -121,17 +121,16 @@ const AddLeaves = (props) => {
         let leave_id = leaveId;
         let leaveName = (leave.status === true && leave.data && leave.data.name && (leave.data.name !== null || leave.data.name !== false)) ? leave.data.name : null;
         let dateRangeArr = (leave.status === true && leave.data && leave.data.date_range) ? leave.data.date_range : null;
-        console.log(dateRangeArr[0]);
-        console.log(dateRangeArr[1]);
-        
+
+
         setEditValues({
             // ...editValuesObj,
-            leaveName: leaveName,               
+            leaveName: leaveName,
             startDate: dateRangeArr[0],
-            endDate:   dateRangeArr[1],
+            endDate: dateRangeArr[1],
             leave_id: leave_id,
         })
-         console.log(editValues);
+
 
 
     }
@@ -141,9 +140,9 @@ const AddLeaves = (props) => {
                 () => getLeaveData(),
                 500), []);
 
-   
 
-    
+
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setFormErrors(validate(editValues));
@@ -158,18 +157,18 @@ const AddLeaves = (props) => {
     }, [formErrors]);
 
 
-    function  diffday() {
+    function diffday() {
         const a = moment(editValues.startDate);
         const b = moment(editValues.endDate);
         const dateRangeArr = [];
 
-     
-            var startDate = editValues.startDate; 
-            dateRangeArr.push(startDate);
 
-            var endDate = editValues.endDate; 
-            dateRangeArr.push(endDate);
-        
+        var startDate = editValues.startDate;
+        dateRangeArr.push(startDate);
+
+        var endDate = editValues.endDate;
+        dateRangeArr.push(endDate);
+
 
         editValues.dateRange = dateRangeArr;
         editValues.noOfDays = b.diff(a, 'days')
@@ -184,7 +183,7 @@ const AddLeaves = (props) => {
         }
     }
 
-  
+
     return (
         <div>
             <Header
@@ -222,9 +221,9 @@ const AddLeaves = (props) => {
                                                         onChange={handleChange}
                                                         className={formErrors.leaveName && "input-error"}
                                                     />
-                                                        {formErrors.leaveName && (
-                                                            <span className="error">{formErrors.leaveName}</span>
-                                                        )}
+                                                    {formErrors.leaveName && (
+                                                        <span className="error">{formErrors.leaveName}</span>
+                                                    )}
                                                 </Grid>
                                                 <Grid item xs={4}>
                                                     <TextField
@@ -284,8 +283,8 @@ const AddLeaves = (props) => {
 
                                             <Grid container className={classes.root} spacing={3}>
                                                 <Grid item xs={4} style={{ display: 'flex' }}>
-                                                    <Button type="submit"  style={{marginTop : "10px"}} onClick={(e) => {diffday()}} variant="contained" color="primary" >Edit Leaves </Button>
-                                                    <Button type="button"  style={{marginTop : "10px"}} onClick={(e) => { e.preventDefault(); props.history.push('/leaves') }}>Cancel</Button>
+                                                    <Button type="submit" style={{ marginTop: "10px" }} onClick={(e) => { diffday() }} variant="contained" color="primary" >Edit Leaves </Button>
+                                                    <Button type="button" style={{ marginTop: "10px" }} onClick={(e) => { e.preventDefault(); props.history.push('/leaves') }}>Cancel</Button>
                                                 </Grid>
                                                 <Grid item xs={4}></Grid>
                                                 <Grid item xs={4}></Grid>

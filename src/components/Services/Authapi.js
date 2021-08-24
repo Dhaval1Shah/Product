@@ -954,4 +954,413 @@ export default new (class AuthApi {
         }
     }
 
+
+    async createjob(postDatas) {
+        try {
+            const url = config.apiurl + config.apis.createjob;
+            console.log(url);
+            let postData = {
+                'jobTitle': postDatas.jobtitle,
+                'numberOfVacancies': postDatas.numofvacanciese,
+                'expRequired': postDatas.exprequire,
+                'minQuallification': postDatas.minqualification,
+                'jobActive': postDatas.jobactive,
+                'jobDescription': postDatas.jobdescription,
+                'companyProfile': postDatas.Companyprofile,
+                'rolesResponbilities': postDatas.roleresponsibilities,
+            }
+            this.setHeaders('post');
+            let data = await axios
+                .post(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+    async getAllJob() {
+        try {
+            const url = config.apiurl + config.apis.getAllJob;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async deletejob(id) {
+        try {
+            const url = config.apiurl + config.apis.deletejob + id;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async singleJob(id) {
+        try {
+            const url = config.apiurl + config.apis.singlejob + id;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async updateJob(job, id) {
+        try {
+            const url = config.apiurl + config.apis.editjob + id;
+            this.setHeaders('put');
+            let postData = {
+                'jobTitle': job.jobtitle,
+                'numberOfVacancies': job.numofvacanciese,
+                'expRequired': job.exprequire,
+                'minQuallification': job.minqualification,
+                'jobActive': job.jobactive,
+                'jobDescription': job.jobdescription,
+                'companyProfile': job.Companyprofile,
+                'rolesResponbilities': job.roleresponsibilities
+
+
+
+            }
+            let data = await axios
+                .put(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async getQulification() {
+        try {
+            const url = config.apiurl + config.apis.getQulification;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async createQulification(postDatas) {
+        try {
+            const url = config.apiurl + config.apis.createQulification;
+
+            let postData = {
+                'qualification': postDatas.qulification,
+
+            }
+            this.setHeaders('post');
+            let data = await axios
+                .post(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async deleteQulification(id) {
+        try {
+            const url = config.apiurl + config.apis.deleteQulification + id;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+    async singleQulification(id) {
+        try {
+            const url = config.apiurl + config.apis.singleQulification + id;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async editQulification(qulif, id) {
+        try {
+            const url = config.apiurl + config.apis.editQulification + id;
+            this.setHeaders('put');
+            let postData = {
+                'qualification': qulif.qulification,
+
+
+
+
+            }
+            let data = await axios
+                .put(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+    async getExperience() {
+        try {
+            const url = config.apiurl + config.apis.getExperience;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async createExperience(postDatas) {
+        try {
+            const url = config.apiurl + config.apis.createExperience;
+            console.log(url);
+            let postData = {
+                'minExpYear': postDatas.minExpYear,
+                'maxExpYear': postDatas.maxExpYear,
+
+            }
+            this.setHeaders('post');
+            let data = await axios
+                .post(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async deleteExperience(id) {
+        try {
+            const url = config.apiurl + config.apis.deleteExperience + id;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async singleExp(id) {
+        try {
+            const url = config.apiurl + config.apis.singleExp + id;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async editExperience(exp, id) {
+        try {
+            const url = config.apiurl + config.apis.editExperience + id;
+            this.setHeaders('put');
+            let postData = {
+                'minExpYear': exp.minExpYear,
+                'maxExpYear': exp.maxExpYear,
+            }
+            let data = await axios
+                .put(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async bdayNotification() {
+        try {
+            const url = config.apiurl + config.apis.bdayNotification
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    async addTime(postDatas) {
+        try {
+            const url = config.apiurl + config.apis.addTime;
+            let postData = {
+                'date': postDatas.selectedDate,
+                "in_time": postDatas.startTime,
+                "out_time": postDatas.endTime,
+            }
+            this.setHeaders('post');
+            let data = await axios
+                .post(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+    async chekUserData() {
+        try {
+            const url = config.apiurl + config.apis.chekUserData;
+            this.setHeaders('get');
+            let data = await axios
+                .get(url)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+    async approveTime(postdatas, id) {
+        try {
+            const url = config.apiurl + config.apis.approveTime + id;
+            this.setHeaders('put');
+            let postData = {
+                'is_approved': postdatas
+
+            }
+            let data = await axios
+                .put(url, postData)
+                .then((res) => {
+                    return res.data;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return data;
+        } catch (error) {
+            return false;
+        }
+    }
+
+
+
 })();

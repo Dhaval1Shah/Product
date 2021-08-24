@@ -22,8 +22,21 @@ import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from 'react-icons/fa'
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import ScreenShot from '../../ScreenShot';
+import Button from '@material-ui/core/Button';
+import ls from "local-storage";
+import Snackbar from '@material-ui/core/Snackbar';
+import Slide from '@material-ui/core/Slide';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+
 
 let length;
+
+let bdayID = false;
+
 
 
 class Dashboard extends Component {
@@ -39,6 +52,10 @@ class Dashboard extends Component {
       selectedDate: "",
       getData: [],
       current: 0,
+      people: [],
+      userID: false,
+      show: true,
+
 
 
 
@@ -46,10 +63,16 @@ class Dashboard extends Component {
     this.getAttr = this.getAttr.bind(this);
     this.handleMonthChange = this.handleMonthChange.bind(this);
     this.getEventData = this.getEventData.bind(this);
-
+    // this.handleClick = this.handleClick.bind(this);
+    // this.handleClose = this.handleClose.bind(this);
+    // this.SlideTransition = this.SlideTransition.bind(this);
+    this.notificationForBday = this.notificationForBday.bind(this);
+    this.handleClickOpen = this.handleClickOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
 
 
   }
+
 
   componentWillMount() {
     if (this.props && this.props.authToken === false) {
@@ -66,6 +89,9 @@ class Dashboard extends Component {
   componentDidMount() {
     this.getAttr();
     this.getEventData();
+    // this.handleClick(this.SlideTransition)
+    this.handleClickOpen();
+    this.notificationForBday();
   }
 
 
@@ -154,6 +180,52 @@ class Dashboard extends Component {
 
 
 
+
+
+  notificationForBday = async () => {
+    const bday = await AuthApi.bdayNotification();
+    if (bday && bday.status === true) {
+
+      this.setState({
+        people: bday.data
+      })
+
+    } else {
+
+    }
+  }
+
+  // SlideTransition = (props) => {
+  //   return <Slide {...props} direction="up" />;
+  // }
+
+  // handleClick = (Transition) => () => {
+  //   this.setState({
+  //     show: true,
+  //     Transition,
+  //   });
+  // };
+
+  // handleClose = () => {
+  //   this.setState({
+
+  //     show: false,
+  //   });
+  // };
+
+  handleClickOpen = () => {
+    this.setState({
+      show: true
+    })
+  };
+
+  handleClose = () => {
+    this.setState({
+      show: false
+    })
+  };
+
+
   render() {
     const classes = this.props;
     const len = length
@@ -164,6 +236,30 @@ class Dashboard extends Component {
       { id: 'dayType', label: 'Day-Type', minWidth: 170, align: 'right' },
 
     ];
+
+
+
+
+    const fs = ls('user').id;
+    const { people } = this.state
+
+    if (people.length) {
+
+      bdayID = people.some((data) => data.id === fs)
+
+    }
+
+    // people.map((elements) => {
+    //   // console.log(elements)
+    //   temp = {
+    //     'id': elements.id
+    //   }
+    //   // console.log(temp)
+    // })
+
+
+
+
 
 
 
@@ -253,6 +349,26 @@ class Dashboard extends Component {
           setAutUser={this.props.setAutUser}
           component={
             <div>
+              {/* <Button onClick={this.handleClick(this.SlideTransition)}>Slide Transition</Button> */}
+              {bdayID &&
+                <Dialog
+                  open={this.state.show}
+                  onClose={this.handleClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">{" From Cherrypic Software Solutions"}</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Happy Birthday To You,
+                    </DialogContentText>
+                    <DialogContentText id="alert-dialog-description">
+                      Have A Great Day
+                    </DialogContentText>
+                  </DialogContent>
+
+                </Dialog>
+              }
               <Card className={classes.root} style={{ marginBottom: '3%' }}>
                 <CardContent>
                   <Breadcrumb
@@ -351,8 +467,8 @@ class Dashboard extends Component {
               </Grid>
 
               <Grid container className={this.state.classes.root} spacing={2}>
-                <Grid item xs={12}>
-                  <Card className={classes.root} style={{ marginBottom: '3%', height: "100%" }}>
+                <Grid item xs={6}>
+                  <Card className={classes.root} style={{ marginBottom: '3%', height: "90%" }} >
                     <CardContent>
                       <h2>UPCOMING EVENT</h2>
                       <Grid item xs={6}>
@@ -387,6 +503,40 @@ class Dashboard extends Component {
                             })}
                           </section>
                         </Typography>
+
+                      </Grid>
+                    </CardContent>
+                  </Card>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Card className={"root"} style={{ marginBottom: '3%', height: "90%" }}>
+                    <CardContent>
+                      <h2 style={{ color: "black", textAlign: "center" }}>
+                        {people.length} - Birthdays Today
+                      </h2>
+                      <Grid item xs={6}>
+
+                        {people.map((person) => {
+                          const { id, firstName, photo } = person
+
+                          return (
+                            <div className="container" key={id}>
+                              <div className="avtar">
+                                <div>
+                                  <img className="bday" src={photo} alt={firstName} />
+                                </div>
+
+                                <div>
+                                  <h3>{firstName}</h3>
+                                </div>
+                              </div>
+
+
+
+                            </div>
+                          )
+                        })}
 
                       </Grid>
                     </CardContent>
@@ -455,6 +605,14 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     maxHeight: 440,
+  },
+  paper1: {
+    position: 'absolute',
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
   },
 }));
 

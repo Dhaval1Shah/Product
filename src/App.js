@@ -29,9 +29,21 @@ import ShowEvent from './components/Pages/ShowEvent/Show'
 import Upcoming from './components/Pages/UpcomingEvent/Upcoming'
 import AddUpcomingEvent from './components/Pages/UpcomingEvent/AddUpcomingEvent'
 import EditUpcomingEvent from './components/Pages/UpcomingEvent/EditUpcomingEvent'
-import Button from '@material-ui/core/Button';
+import Job from './components/Pages/JobPortal/JobList'
+import Addjob from './components/Pages/JobPortal/AddJob'
+import Editjob from './components/Pages/JobPortal/EditJob'
+import Qulification from './components/Pages/Qulification/QulificationList'
+import Addqulification from './components/Pages/Qulification/AddQulification'
+import Editqulification from './components/Pages/Qulification/EditQulification'
+import Experience from './components/Pages/Experience/ExperienceList';
+import Addexperience from './components/Pages/Experience/AddExperience';
+import Editexp from './components/Pages/Experience/EditExp'
+import Time from './components/Pages/TIme Entry/AddTime';
+import Check from './components/Pages/UserCheck/Check';
 import { capture } from './ScreenShot';
+import ReactNotification, { store } from 'react-notifications-component'
 
+let bdayID = false;
 
 
 class App extends Component {
@@ -54,6 +66,7 @@ class App extends Component {
     this.updateCounterOnload = this.updateCounterOnload.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
+    // this.handleOnClick = this.handleOnClick.bind(this);
 
   }
 
@@ -73,7 +86,6 @@ class App extends Component {
     //   this.runCycle()
     // }
   }
-
 
 
 
@@ -154,9 +166,7 @@ class App extends Component {
     this.setState(authData);
   }
 
-  componentDidMount() {
-    setInterval(() => { capture() }, 1000)
-  }
+
 
   componentDidMount() {
     if (this.state.timerOn) {
@@ -168,6 +178,52 @@ class App extends Component {
     this.getAuth();
   }
 
+  // componentDidMount() {
+  //   if (this.state.user) {
+  //     setInterval(() => { capture() }, 1000)
+  //   }
+  // }
+  // componentDidMount() {
+  //   this.handleOnClick();
+  // }
+
+  // handleOnClick = async () => {
+
+  //   store.addNotification({
+  //     title: "Happy Birthday To you",
+  //     message: "Have A Great Day",
+  //     type: "info",
+  //     insert: "center",
+  //     container: "top-center",
+  //     animationIn: ["animated", "fadeIn"],
+  //     animationOut: ["animated", "fadeOut"],
+  //     dismiss: {
+  //       duration: 10000,
+  //       onScreen: true,
+  //       showIcon: true
+  //     },
+  //     width: 700,
+  //   })
+
+  //   const bday = await AuthApi.bdayNotification();
+  //   console.log(bday)
+  //   // if (bday && bday.status === true) {
+
+  //   //   this.setState({
+  //   //     people: bday.data
+  //   //   })
+
+  //   // }
+
+  //   const fs = ls('user').id;
+  //   // const { people } = this.state
+
+  //   if (bday && bday.status === true && bday.data.length) {
+  //     bdayID = bday.data.some((data) => data.id == fs)
+  //     console.log('bdayID: ', bdayID);
+  //   }
+
+  // }
 
 
 
@@ -356,8 +412,103 @@ class App extends Component {
               authToken={this.state.authToken}
               setAutUser={this.setAutUser}
             />
-            {/* <Button onclick={this.capture}>capture</Button>
-            <Button onclick={this.revokeAccess}>Revoke Access</Button> */}
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/job"
+              component={Job}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/job/add"
+              component={Addjob}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/job/edit/:id"
+              component={Editjob}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/qulification"
+              component={Qulification}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/qulification/add"
+              component={Addqulification}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/qulification/edit/:id"
+              component={Editqulification}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/experience"
+              component={Experience}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/experience/add"
+              component={Addexperience}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/experience/edit/:id"
+              component={Editexp}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/time"
+              component={Time}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+            <ProtectedRoute
+              {...this.props}
+              exact
+              path="/check"
+              component={Check}
+              authUser={this.state.authUser}
+              authToken={this.state.authToken}
+              setAutUser={this.setAutUser}
+            />
+
 
             {/* {ls('roles') === 'Super Admin' ?
               <Route exact path='/permission' render={(props) => (

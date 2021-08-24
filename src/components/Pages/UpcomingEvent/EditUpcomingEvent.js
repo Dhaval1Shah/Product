@@ -284,7 +284,7 @@ const EditTicket = (props) => {
                                             <Grid container className={classes.root} spacing={5} >
                                                 <Grid item xs={6}>
                                                     <TextareaAutosize
-                                                        style={{ float: 'left', width: "670px" }}
+                                                        style={{ float: 'left', width: "100%" }}
                                                         aria-label="empty textarea"
                                                         placeholder="Add Details"
                                                         name="description"

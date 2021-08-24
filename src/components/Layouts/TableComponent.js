@@ -54,6 +54,8 @@ export default function TableComponent(props) {
         {(props.actionBtns.indexOf('update') > -1) ? <Grid item xs={1}> <IconButton variant="contained" color="primary" onClick={(e) => { (props.openPopUpUpdate !== false) ? props.openPopUpUpdate(row) : props.history.push(props.updateRoute + '/' + row.id) }}><FontAwesomeIconComponent classes="fa fa-edit" colorName="primary" fontSize={"small"} /></IconButton> </Grid> : ""}
         {(props.actionBtns.indexOf('delete') > -1) ? <Grid item xs={1}> <IconButton variant="contained" color="primary" onClick={(e) => { props.removeRow(row.id) }}><FontAwesomeIconComponent classes="fa fa-trash" colorName="primary" fontSize={"small"} /></IconButton> </Grid> : ""}
         {(props.actionBtns.indexOf('show') > -1) ? <Grid item xs={1}> <IconButton variant="contained" color="primary" onClick={(e) => { e.preventDefault(); props.history.push('/show' + '/' + row.id) }} ><FontAwesomeIconComponent classes="far fa-eye" colorName="primary" fontSize={"small"} /></IconButton> </Grid> : ""}
+        {(props.actionBtns.indexOf('approve') > -1) ? <Grid item xs={1}> <IconButton variant="contained" color="primary" onClick={(e) => { props.acceptRow(row.id) }} ><FontAwesomeIconComponent classes="far fa-check-square" colorName="primary" fontSize={"small"} /></IconButton> </Grid> : ""}
+        {(props.actionBtns.indexOf('reject') > -1) ? <Grid item xs={1}> <IconButton variant="contained" color="primary" onClick={(e) => { props.rejectRow(row.id) }} ><FontAwesomeIconComponent classes="fas fa-window-close" colorName="primary" fontSize={"small"} /></IconButton> </Grid> : ""}
       </Grid>
     </div>
   };
@@ -112,7 +114,7 @@ export default function TableComponent(props) {
   return (
     <TableContainer component={Paper} style={{ marginBottom: '5%' }}>
       <Typography variant="h2">Manage {props.modelName}</Typography>
-      <Button variant="contained" color="primary" style={{ float: "right", margin: "22px", display: url == 'http://localhost:3000/event' ? ls('roles') === 'Super Admin' ? 'block' : 'none' : 'block' }} onClick={(e) => { (props.openPopUp !== false) ? props.openPopUp() : props.history.push(props.addRoute) }} >Add</Button>
+      <Button variant="contained" color="primary" style={{ float: "right", margin: "22px", display: url == 'http://localhost:3000/event' || url == 'http://localhost:3000/check' ? ls('roles') === 'Super Admin' && ls('roles') === 'Admin' ? 'block' : 'none' : 'block' }} onClick={(e) => { (props.openPopUp !== false) ? props.openPopUp() : props.history.push(props.addRoute) }} >Add</Button>
       <Table className={classes.table} aria-label="customized table" style={{ tableLayout: 'fixed', width: '100%' }}>
         <TableHead>
           <EnhancedTableHead

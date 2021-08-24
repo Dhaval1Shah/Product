@@ -45,6 +45,8 @@ import { Pdfdownload } from '../../../TableAction'
 
 let length;
 
+let ds;
+
 const columns = [
     { id: 'BasicSalary', label: 'BasicSalary', minWidth: 170 },
     { id: 'DA', label: 'DA', minWidth: 100 },
@@ -214,7 +216,10 @@ const Profile = (props) => {
         let userId = ls('user').id
         console.log(userId)
         const gh = await AuthApi.addSalary(sal, userId);
-        console.log(gh)
+        if (gh && gh.status === true) {
+            console.log("ds")
+            props.history.push("/dashboard")
+        }
     }
 
 
@@ -224,7 +229,7 @@ const Profile = (props) => {
         let year = today.getFullYear();
         const AllData = await AuthApi.getAllSalaryData(month, year);
 
-        length = AllData.data.length
+        // length = AllData.data.length
         if (AllData && AllData.status === true) {
             SetData({
                 ...data,
@@ -247,7 +252,7 @@ const Profile = (props) => {
         return { BasicSalary, DA, HRA, CA, PF, Tax, netSalary };
     }
 
-    var ds = [data.getData]
+    ds = [data.getData]
 
 
     const rows = [];
@@ -662,26 +667,31 @@ const Profile = (props) => {
                                         }}
                                         inputProps={{ min: "2020-01", max: dateString }}
                                     />
+                                    {ls('roles') === 'Super Admin' ?
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            color="primary"
+                                            style={{ float: "right", width: "25px" }}
+                                            onClick={addSalary1}
+                                        >
+                                            Submit
+                                        </Button> : null}
 
-                                    <Button
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary"
-                                        style={{ float: "right", width: "25px" }}
-                                        onClick={addSalary1}
-                                    >
-                                        Submit
-                                    </Button>
-
-                                    <TextField
-                                        id="outlined-basic"
-                                        label="Salary"
-                                        variant="outlined"
-                                        name="salary"
-                                        style={{ top: "-10px", float: "right" }}
-                                        value={sal.salary}
-                                        onChange={handleSalary}
-                                    />
+                                    {ls('roles') === 'Super Admin' ?
+                                        <TextField
+                                            id="outlined-basic"
+                                            label="Salary"
+                                            variant="outlined"
+                                            name="salary"
+                                            style={{ top: "-10px", float: "right" }}
+                                            value={sal.salary}
+                                            onChange={handleSalary}
+                                            className={classes.textField}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                        /> : null}
 
 
 
@@ -713,7 +723,8 @@ const Profile = (props) => {
                                                                         {column.buttons.map((ds, index) => {
                                                                             return (
                                                                                 <React.Fragment key={index}>
-                                                                                    <Pdfdownload />
+                                                                                    {ds === "Data Not Found" ?
+                                                                                        <Pdfdownload variant="contained" color="primary" classes="fas fa-file-pdf" colorName="primary" /> : <div display="none"></div>}
                                                                                 </React.Fragment>
                                                                             )
                                                                         })}

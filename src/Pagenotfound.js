@@ -1,10 +1,21 @@
 import React from 'react'
+import Button from '@material-ui/core/Button';
 
-const Pagenotfound = () => {
+const Pagenotfound = (props) => {
     return (
-        <div style={{ backgroundColor: '#fafafa' }}>
-            <h1 style={{ fontSize: '150px' }}>404 - Not Found!</h1>
+        <div calss="flex">
+            <h1>404 Error Page #!</h1>
+            <p class="zoom-area"><b>make a cool 404 page.</b>  </p>
+            <section class="error-container">
+                <span>4</span>
+                <span><span class="screen-reader-text">0</span></span>
+                <span>4</span>
+            </section>
+
+            <a button class="more-link" onClick={(e) => { e.preventDefault(); props.history.push('/dashboard') }}>Go back</a>
+
         </div>
+
     )
 }
 

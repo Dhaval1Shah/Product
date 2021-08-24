@@ -47,6 +47,26 @@ export default {
         EditupcomingEvent: "api/upcomingevent/",
         deleteUpcomingImage: "api/removeEventFile",
         addSalary: "api/users/add-salary/",
-        AllSalarydata: "api/user/salary/"
+        AllSalarydata: "api/user/salary/",
+        createjob: "api/job/create",
+        getAllJob: "api/job/show",
+        deletejob: "api/job/delete/",
+        singlejob: "api/job/show/",
+        editjob: "api/job/update/",
+        getQulification: "api/qualification/show",
+        createQulification: "api/qualification/create",
+        deleteQulification: "api/qualification/delete/",
+        singleQulification: "api/qualification/show/",
+        editQulification: "api/qualification/update/",
+        getExperience: "api/experience/show",
+        createExperience: "api/experience/create",
+        deleteExperience: "api/experience/delete/",
+        singleExp: "api/experience/show/",
+        editExperience: "api/experience/update/",
+        bdayNotification: "api/employeebdynotification/show",
+        addTime: "api/timeEntry/addtime",
+        chekUserData: "api/timeEntry/show",
+        approveTime: "api/timeEntry/updateStatus/",
+
     }
 };

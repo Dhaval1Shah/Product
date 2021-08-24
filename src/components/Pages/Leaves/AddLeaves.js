@@ -55,14 +55,14 @@ const AddLeaves = (props) => {
 
 
 
-   
-    
 
-      useEffect(() => {
+
+
+    useEffect(() => {
         if (props && props.authToken === false) {
             props.history.push('/login');
-          }
-        });
+        }
+    });
 
 
     //   componentWillReceiveProps(props) {
@@ -70,7 +70,7 @@ const AddLeaves = (props) => {
     //       props.history.push('/login');
     //     }
     //   }
-    
+
 
 
 
@@ -195,7 +195,7 @@ const AddLeaves = (props) => {
         leaveValues.noOfDays = b.diff(a, 'days')
 
     }
-    console.log(leaveValues);
+    // console.log(leaveValues);
 
 
 
@@ -309,8 +309,8 @@ const AddLeaves = (props) => {
 
                                             <Grid container className={classes.root} spacing={3}>
                                                 <Grid item xs={4} style={{ display: 'flex' }}>
-                                                    <Button type="submit" onClick={(e) => { diffday() }} style={{marginTop : "10px"}} variant="contained" color="primary">Save</Button>
-                                                    <Button type="button"  style={{marginTop : "10px"}} onClick={(e) => { e.preventDefault(); props.history.push('/leaves') }}>Cancel</Button>
+                                                    <Button type="submit" onClick={(e) => { diffday() }} style={{ marginTop: "10px" }} variant="contained" color="primary">Save</Button>
+                                                    <Button type="button" style={{ marginTop: "10px" }} onClick={(e) => { e.preventDefault(); props.history.push('/leaves') }}>Cancel</Button>
                                                 </Grid>
                                                 <Grid item xs={4}></Grid>
                                                 <Grid item xs={4}></Grid>

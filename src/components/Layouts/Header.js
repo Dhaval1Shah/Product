@@ -25,6 +25,19 @@ import Logo from "../../Images/logo.png";
 import FontAwesomeIconComponent from './FontAwesomeIconComponent';
 import Nav from './Nav';
 import { revokeAccess } from '../../ScreenShot';
+import Button from '@material-ui/core/Button';
+import Fade from '@material-ui/core/Fade';
+import Grow from '@material-ui/core/Grow';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import MenuList from '@material-ui/core/MenuList';
+import { Collapse } from '@material-ui/core';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import StarBorder from '@material-ui/icons/StarBorder';
+
+
 
 const drawerWidth = 240;
 
@@ -34,6 +47,15 @@ export default function MiniDrawer(props) {
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const opens = Boolean(anchorEl);
+  const [ds, setDs] = React.useState(false);
+
+  const handleClick = () => {
+    setDs(!ds);
+  };
+
+
+
+
 
 
 
@@ -49,6 +71,7 @@ export default function MiniDrawer(props) {
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -219,6 +242,38 @@ export default function MiniDrawer(props) {
           </Tooltip> */}
           <Nav key={Math.random()} onClick={(e) => { e.preventDefault(); props.history.push('/tickets') }} classes="fas fa-ticket-alt" primary="Leaves Tickets" title="Leave Tickets" placement="right" />
           <Nav key={Math.random()} onClick={(e) => { e.preventDefault(); props.history.push('/event') }} classes="fa fa-calendar" primary="Event" title="Event" placement="right" />
+          {/* <Nav key={Math.random()} onClick={(e) => { e.preventDefault(); props.history.push('/job') }} classes="fas fa-briefcase" primary="Job-Portal" title="JobPortal" placement="right" /> */}
+
+
+          <ListItem button onClick={handleClick}  >
+            <ListItemIcon>
+              <FontAwesomeIconComponent classes="fas fa-briefcase" colorName="primary" fontSize={"small"} />
+            </ListItemIcon>
+            <ListItemText primary="Job-Portal" />
+            {ds || open ? <ExpandMore /> : <ExpandLess />}
+          </ListItem>
+          <Collapse in={ds && open} timeout="auto" unmountOnExit >
+            <List disablePadding>
+              <ListItem button onClick={(e) => { e.preventDefault(); props.history.push('/job') }} className={classes.nested}>
+
+                <ListItemText primary="job" />
+              </ListItem>
+              <ListItem button onClick={(e) => { e.preventDefault(); props.history.push('/qulification') }} className={classes.nested}>
+
+                <ListItemText primary="Qualification" />
+              </ListItem>
+              <ListItem button onClick={(e) => { e.preventDefault(); props.history.push('/experience') }} className={classes.nested}>
+
+                <ListItemText primary="Experience" />
+              </ListItem>
+            </List>
+          </Collapse>
+
+          <Nav key={Math.random()} onClick={(e) => { e.preventDefault(); props.history.push('/time') }} classes="far fa-times-circle" primary="Time Entry" title="Time Entry" placement="right" />
+
+          {ls('roles') === 'Admin' ?
+            <Nav key={Math.random()} onClick={(e) => { e.preventDefault(); props.history.push('/check') }} classes="fas fa-clipboard-check" primary="User Check" title="User Check" placement="right" />
+            : ""}
 
 
 
@@ -236,6 +291,9 @@ export default function MiniDrawer(props) {
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+  },
+  paper: {
+    marginRight: theme.spacing(2),
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -297,5 +355,14 @@ const useStyles = makeStyles((theme) => ({
   ds: {
     position: 'absolute',
     right: 0
-  }
+  },
+  back: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+  },
+  nested: {
+    paddingLeft: theme.spacing(4),
+  },
+
 }));

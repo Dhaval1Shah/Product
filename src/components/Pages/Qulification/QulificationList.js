@@ -1,36 +1,35 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Header from '../../Layouts/Header'
 import Footer from '../../Layouts/Footer';
-import AuthApi from '../../Services/Authapi';
-import TableComponent from '../../Layouts/TableComponent';
 import Breadcrumb from '../../Layouts/Breadcrumb';
+import AuthApi from '../../Services/Authapi';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import TableComponent from '../../Layouts/TableComponent';
 import swal from 'sweetalert';
 
-class Upcoming extends Component {
+class QulificationList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            upcoming: [],
+            qulification: [],
             count: 0,
             pageStatus: false,
             tableTh: [
-                { id: 'name', numeric: false, disablePadding: true, label: 'Name', sortable: true },
-                { id: 'date', numeric: false, disablePadding: true, label: 'Date', sortable: true },
+                { id: 'qualification', numeric: false, disablePadding: true, label: 'Qulification', sortable: true },
                 { id: 'created_at', numeric: false, disablePadding: true, label: 'Created On', sortable: true },
                 { id: 'actions', numeric: false, disablePadding: true, label: 'Actions', sortable: false }
             ]
         }
-        this.eventData = this.eventData.bind(this);
-        this.removeEvent = this.removeEvent.bind(this);
+        this.qulificationData = this.qulificationData.bind(this);
+        this.removeQulification = this.removeQulification.bind(this);
     }
 
     componentWillMount() {
         if (this.props && this.props.authToken === false) {
             this.props.history.push('/login');
         }
-        this.eventData();
+        this.qulificationData();
     }
 
     componentWillReceiveProps(props) {
@@ -39,30 +38,33 @@ class Upcoming extends Component {
         }
     }
 
-    eventData = async (e) => {
-        let events = await AuthApi.getAllEvents();
-        if (events && events.status === true) {
-            this.setState({
-                upcoming: events.data,
-                count: events.data.length
-            })
+    qulificationData = async (e) => {
+        let qulif = await AuthApi.getQulification();
 
-        }
+
+        // if (jobs && jobs.status === true) {
+        this.setState({
+            qulification: qulif.data,
+            count: qulif.data.length
+        })
+
+        // }
     }
 
-    async removeEvent(id) {
+
+    async removeQulification(id) {
         swal({
             title: "Are you sure?",
             icon: "warning",
             buttons: ["Cancel", "Yes"]
         }).then(async (confirm) => {
             if (confirm) {
-                let currentEvent = await AuthApi.AlleventDelete(id);
+                let currentEvent = await AuthApi.deleteQulification(id);
                 if (currentEvent && currentEvent.status === true) {
                     this.setState({
                         pageStatus: true
                     })
-                    this.eventData();
+                    this.qulificationData();
                     setTimeout(
                         () => this.setState({ pageStatus: false }),
                         500
@@ -87,8 +89,8 @@ class Upcoming extends Component {
                                 <CardContent>
                                     <Breadcrumb
                                         {...this.props}
-                                        primaryPageName="Upcoming Events"
-                                        primaryPageLink="/upcoming"
+                                        primaryPageName="Qulification"
+                                        primaryPageLink="/qulification"
                                         isSecondaryPage={false}
                                         secondaryPageName="" />
                                 </CardContent>
@@ -96,34 +98,26 @@ class Upcoming extends Component {
                             <TableComponent
                                 {...this.props}
                                 tableTh={this.state.tableTh}
-                                tableData={this.state.upcoming}
+                                tableData={this.state.qulification}
                                 tableCount={this.state.count}
                                 tablePagestatus={this.state.pageStatus}
-                                colNameToShow={['name', 'date', 'created_at']}
+                                colNameToShow={['qualification', 'companyProfile', 'created_at']}
                                 openPopUp={false}
-                                removeRow={this.removeEvent}
+                                removeRow={this.removeQulification}
                                 actionBtns={['update', 'delete']}
-                                modelName={'Upcoming Event'}
-                                addRoute={'/upcoming/add'}
-                                updateRoute={'/upcoming/edit'}
+                                modelName={'Qulification'}
+                                addRoute={'/qulification/add'}
+                                updateRoute={'/qulification/edit'}
                                 openPopUpUpdate={false}
-                            /></div>
+                            />
+                        </div>
                     } />
                 <Footer {...this.props} />
-            </div>
+
+
+            </div >
         )
     }
 }
-export default Upcoming;
-// import React from 'react'
 
-// const Upcoming = () => {
-//     return (
-//         <div>
-//             hy
-//         </div>
-//     )
-// }
-
-
-// export default Upcoming;
+export default QulificationList;

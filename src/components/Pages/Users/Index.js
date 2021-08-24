@@ -14,7 +14,7 @@ class User extends Component {
     this.state = {
       users: [],
       count: 0,
-      pageStatus:false,
+      pageStatus: false,
       tableTh: [
         { id: 'name', numeric: false, disablePadding: true, label: 'Name', sortable: true },
         { id: 'email', numeric: false, disablePadding: true, label: 'Email', sortable: true },
@@ -42,8 +42,10 @@ class User extends Component {
   userData = async (e) => {
     let users = await AuthApi.getData();
     if (users && users.status === true) {
-      this.setState({ users: users.data,
-        count: users.data.length })
+      this.setState({
+        users: users.data,
+        count: users.data.length
+      })
     }
   }
 
@@ -57,11 +59,11 @@ class User extends Component {
         let currentUser = await AuthApi.userDelete(id);
         if (currentUser && currentUser.status === true) {
           this.setState({
-            pageStatus:true
+            pageStatus: true
           })
           this.userData();
           setTimeout(
-            () => this.setState({  pageStatus:false }), 
+            () => this.setState({ pageStatus: false }),
             500
           );
         } else {

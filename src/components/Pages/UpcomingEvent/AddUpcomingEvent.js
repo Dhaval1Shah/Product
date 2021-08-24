@@ -82,6 +82,9 @@ const UpcomingEvent = (props) => {
             })
 
         }
+        else {
+
+        }
     }
 
 
@@ -181,7 +184,7 @@ const UpcomingEvent = (props) => {
     const upcomingEvent = async () => {
 
         let create1 = await AuthApi.createUpcomingEvent(eventValues);
-        // console.log(create1)
+        console.log(create1)
         if (create1 && create1.status === true) {
             props.history.push('/upcoming');
         } else {
@@ -272,7 +275,7 @@ const UpcomingEvent = (props) => {
                                             <Grid container className={classes.root} spacing={5} >
                                                 <Grid item xs={6}>
                                                     <TextareaAutosize
-                                                        style={{ float: 'left', width: "670px" }}
+                                                        style={{ float: 'left', width: "100%" }}
                                                         aria-label="empty textarea"
                                                         placeholder="Add Details"
                                                         name="description"

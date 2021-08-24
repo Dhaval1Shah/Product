@@ -45,7 +45,7 @@ const EditTicket = (props) => {
     const [editValues, setEditValues] = useState(inileaves);
     const [formErrors, setFormErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
- 
+
 
     useEffect(() => {
         if (props && props.authToken === false) {
@@ -326,11 +326,11 @@ const EditTicket = (props) => {
                                                     )} */}
                                                 </Grid>
 
-                                                               
+
                                                 <Grid item xs={3}>
-                                             
-                                                 <FormControl  variant="outlined" style={{ width: '100%' }} disabled={ls('roles') === 'Super Admin'  ? false : true }> 
-                                                        <InputLabel id="demo-simple-select-outlined-label1">Leave-Status</InputLabel> 
+
+                                                    <FormControl variant="outlined" style={{ width: '100%' }} disabled={ls('roles') === 'Super Admin' ? false : true}>
+                                                        <InputLabel id="demo-simple-select-outlined-label1">Leave-Status</InputLabel>
                                                         <Select
                                                             autoFocus
                                                             labelId="demo-simple-select-outlined-label1"
@@ -342,16 +342,16 @@ const EditTicket = (props) => {
                                                             // focused={(editValues && editValues.leaveStatus !== null) ? true : false}
                                                             onChange={handleChange}
                                                             className={formErrors.leaveStatus && "input-error"}
-                                                        > 
+                                                        >
                                                             <MenuItem value="pending">Pending</MenuItem>
                                                             <MenuItem value="approved">Approved</MenuItem>
                                                             <MenuItem value="declined">Declined</MenuItem>
                                                             <MenuItem value="canceled">Canceled</MenuItem>
                                                         </Select>
-                                                    </FormControl> 
+                                                    </FormControl>
                                                     {formErrors.leaveStatus && (
                                                         <span className="error">{formErrors.leaveStatus}</span>
-                                                    )} 
+                                                    )}
                                                 </Grid>
 
 
